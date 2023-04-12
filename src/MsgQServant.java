@@ -14,31 +14,48 @@ public class MsgQServant implements MsgQ, Runnable {
     public MsgQServant() throws RemoteException{
 
     }
+
+    private boolean existeixMsgQ(String msgqname){
+        if(clientQueues.get(msgqname)!=null){
+            return true;
+        }
+        return false;
+    }
     public EMomError MsgQ_CreateQueue(String msgqname) throws RemoteException {
-        CreateQueue(msgqname);
-        return null;
+        return createQueue(msgqname);
     }
 
-    private void CreateQueue(String msgqname) {
-        clientQueues.put(msgqname, new Stack<Message>());
+    private EMomError createQueue(String msgqname) {
+        if(existeixMsgQ(msgqname)) {
+            clientQueues.put(msgqname, new Stack<>());
+            return EMomError.NoError;
+        }
+        return EMomError.JaExisteixMsgQ;
     }
 
     public EMomError MsgQ_CloseQueue(String msgqname)throws RemoteException{
-        CloseQueue(msgqname);
-        return null;
+        return closeQueue(msgqname);
     }
 
-    private void CloseQueue(String msgqname) {
-        clientQueues.remove(msgqname);
+    private EMomError closeQueue(String msgqname) {
+        if(clientQueues.get(msgqname)!=null){
+            clientQueues.remove(msgqname);
+            return EMomError.NoError;
+        }
+        return EMomError.NoExisteixMsgQ;
     }
 
     public EMomError MsgQ_SendMessage(String msgqname, String message, int type) throws RemoteException{
-        sendMessage(msgqname,message,type);
-        return null;
+        return sendMessage(msgqname,message,type);
     }
 
-    private void sendMessage(String msgqname, String message, int type) {
-        clientQueues.get(msgqname).add(new Message(message,type));
+    private EMomError sendMessage(String msgqname, String message, int type) {
+        if(existeixMsgQ(msgqname)){
+            clientQueues.get(msgqname).add(new Message(message,type));
+            return EMomError.NoError;
+        }
+        return EMomError.NoExisteixMsgQ;
+
     }
 
     private int FIFOSeach(Vector<Message> messages,int type){
@@ -76,7 +93,9 @@ public class MsgQServant implements MsgQ, Runnable {
     }
 
     private void closeTopic(String topicname) {
+        topicQueues.get(topicname).remove(topicname);
         topicQueues.remove(topicname);
+
     }
 
     public  EMomError MsgQ_Publish(String topic, String message, int type) throws RemoteException{

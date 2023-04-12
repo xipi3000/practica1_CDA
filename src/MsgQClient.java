@@ -65,7 +65,8 @@ public class MsgQClient implements TopicListenerInterface {
     }
 
     @Override
-    public void onTopicClosed() throws RemoteException {
+    public void onTopicClosed(String topic) throws RemoteException {
+        System.out.println("S'ha tancat el topic: "+topic);
 
     }
 

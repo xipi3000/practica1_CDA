@@ -29,6 +29,21 @@ public class TopicQueue {
     public void subscribe(TopicListenerInterface listener){
         listenerQueue.add(listener);
     }
+    public void remove(String topic){
+        for(Enumeration e = listenerQueue.elements(); e.hasMoreElements();){
+            TopicListenerInterface listener = (TopicListenerInterface) e.nextElement();
+            try {
+                listener.onTopicClosed(topic);
+                listenerQueue.remove( listener );
+            }
+            catch (RemoteException re)
+            {
+                System.out.println (" Listener not accessible, removing listener -" + listener);
+                // Remote the listener
+                listenerQueue.remove( listener );
+            }
+        }
+    }
 
 
 }
