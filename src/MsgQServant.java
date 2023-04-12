@@ -8,8 +8,8 @@ import java.util.Vector;
 public class MsgQServant implements MsgQ, Runnable {
     private static final long serialVersionUID = 1;
 
-    private Hashtable<String,Vector<Message>> clientQueues;
-    private Hashtable<String, TopicQueue> topicQueues;
+    private Hashtable<String,Vector<Message>> clientQueues = new Hashtable<>();
+    private Hashtable<String, TopicQueue> topicQueues = new Hashtable<>();
 
     public MsgQServant() throws RemoteException{
 
@@ -81,7 +81,6 @@ public class MsgQServant implements MsgQ, Runnable {
 
     public  EMomError MsgQ_Publish(String topic, String message, int type) throws RemoteException{
         topicQueues.get(topic).addMsg(new Message(message,type));
-
 
         return null;
     }

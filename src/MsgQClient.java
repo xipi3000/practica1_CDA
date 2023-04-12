@@ -4,7 +4,7 @@ import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-public class MsgQClient {
+public class MsgQClient implements TopicListenerInterface {
     private MsgQ msgQ;
     public void MsqQ_Init(String ServerAddress) {
 
@@ -58,4 +58,16 @@ public class MsgQClient {
 
         return null;
     }
+
+    @Override
+    public void onTopicMessage(String message) throws RemoteException {
+        System.out.println(message);
+    }
+
+    @Override
+    public void onTopicClosed() throws RemoteException {
+
+    }
+
+
 }

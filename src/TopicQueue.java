@@ -1,3 +1,5 @@
+import java.rmi.RemoteException;
+import java.util.Enumeration;
 import java.util.Vector;
 
 public class TopicQueue {
@@ -11,6 +13,18 @@ public class TopicQueue {
     }
     public void addMsg(Message message){
         topicQueue.add(message);
+        for(Enumeration e = listenerQueue.elements(); e.hasMoreElements();){
+            TopicListenerInterface listener = (TopicListenerInterface) e.nextElement();
+            try {
+                listener.onTopicMessage(message.message);
+            }
+            catch (RemoteException re)
+                {
+                    System.out.println (" Listener not accessible, removing listener -" + listener);
+                    // Remote the listener
+                    listenerQueue.remove( listener );
+                }
+        }
     }
     public void subscribe(TopicListenerInterface listener){
         listenerQueue.add(listener);
