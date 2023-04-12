@@ -122,7 +122,7 @@ public class MsgQServant implements MsgQ, Runnable {
     public  EMomError MsgQ_Publish(String topic, String message, int type) throws RemoteException{
         return publish(topic,message,type);
     }
-    public  EMomError publish(String topic, String message, int type) throws RemoteException{
+    public  EMomError publish(String topic, String message, int type){
         if(existeixTopicQ(topic)){
             topicQueues.get(topic).addMsg(new Message(message,type));
             return EMomError.NoError;
@@ -134,7 +134,7 @@ public class MsgQServant implements MsgQ, Runnable {
         return subscribe(topic,listener);
     }
 
-    public  EMomError subscribe(String topic, TopicListenerInterface listener) throws RemoteException{
+    public  EMomError subscribe(String topic, TopicListenerInterface listener){
         if(existeixTopicQ(topic)) {
             topicQueues.get(topic).subscribe(listener);
             return EMomError.NoError;

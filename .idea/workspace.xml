@@ -5,11 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="860d4be7-a091-4234-ab2e-65298a77c519" name="Changes" comment="init">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/EMomError.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EMomError.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/EPublishMode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EPublishMode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MsgQClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MsgQClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MsgQServant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MsgQServant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TopicQueue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TopicQueue.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
