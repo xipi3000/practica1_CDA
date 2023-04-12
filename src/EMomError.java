@@ -1,6 +1,6 @@
 public enum EMomError {
     NoExisteixMsgQ,
     JaExisteixMsgQ,
-    NoError,
+    NoError, JaExisteixTopicQ, NoExisteixTopicQ,
 
 }

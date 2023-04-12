@@ -4,9 +4,11 @@ import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+import static java.lang.Thread.sleep;
+
 public class MsgQClient implements TopicListenerInterface {
-    private MsgQ msgQ;
-    public void MsqQ_Init(String ServerAddress) {
+    private static MsgQ msgQ;
+    public static void MsqQ_Init(String ServerAddress) {
 
         // Registration format //registry_hostname (optional):port /service
         String registration = "rmi://" + ServerAddress + "/BombillaRMICallbacks";
@@ -27,36 +29,30 @@ public class MsgQClient implements TopicListenerInterface {
             System.out.println ("RMI Error - " + e);
         }
     }
-    public EMomError MsgQ_CreateQueue(String msgqname) throws RemoteException {
-        msgQ.MsgQ_CreateQueue(msgqname);
-        return null;
+    public static EMomError MsgQ_CreateQueue(String msgqname) throws RemoteException {
+        return  msgQ.MsgQ_CreateQueue(msgqname);
     }
     public EMomError MsgQ_CloseQueue(String msgqname) throws RemoteException {
-        msgQ.MsgQ_CloseQueue(msgqname);
-        return null;
+        return msgQ.MsgQ_CloseQueue(msgqname);
     }
-    public EMomError MsgQ_SendMessage(String msgqname, String message, int type) throws RemoteException {
-        msgQ.MsgQ_SendMessage(msgqname,message,type);
-        return null;
+    public static EMomError MsgQ_SendMessage(String msgqname, String message, int type) throws RemoteException {
+        return msgQ.MsgQ_SendMessage(msgqname,message,type);
+
     }
-    public String MsgQ_ReceiveMessage(String msgqname, int type) throws RemoteException {
+    public static String MsgQ_ReceiveMessage(String msgqname, int type) throws RemoteException {
         return msgQ.MsgQ_ReceiveMessage(msgqname,type);
     }
     public  EMomError MsgQ_CreateTopic(String topicname, EPublishMode mode) throws RemoteException {
-
-        return null;
+        return msgQ.MsgQ_CreateTopic(topicname,mode);
     }
     public EMomError MsgQ_CloseTopic(String topicname) throws RemoteException {
-
-        return null;
+        return msgQ.MsgQ_CloseTopic(topicname);
     }
     public  EMomError MsgQ_Publish(String topic, String message, int type) throws RemoteException {
-
-        return null;
+        return msgQ.MsgQ_Publish(topic,message,type);
     }
     public  EMomError MsgQ_Subscribe(String topic, TopicListenerInterface listener) throws RemoteException  {
-
-        return null;
+        return msgQ.MsgQ_Subscribe(topic,listener);
     }
 
     @Override
@@ -68,6 +64,14 @@ public class MsgQClient implements TopicListenerInterface {
     public void onTopicClosed(String topic) throws RemoteException {
         System.out.println("S'ha tancat el topic: "+topic);
 
+    }
+    public static void main(String[] args) throws RemoteException, InterruptedException {
+        MsqQ_Init("localhost");
+        MsgQ_CreateQueue("nigg");
+
+        System.out.println(MsgQ_ReceiveMessage("nigg",0));
+        sleep(5000);
+        MsgQ_SendMessage("nigg","adeu",0);
     }
 
 
