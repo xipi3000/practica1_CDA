@@ -1,13 +1,17 @@
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.StringTokenizer;
 
 public class DisSumMaster {
-    public static void main(String[] args) throws RemoteException {
-        /*
-        El programa máster recibirá como parámetros el intervalo final del sumatorio (M), el número de tareas a generar
-        (N) y la dirección donde se ejecuta el servidor de RMI (por defecto será localhost).
-        Sintaxis: DisSumMaster <intervalo_final_sum> <#trabajos> [<ip_servidor>]
-        */
+    /*
+    El programa máster recibirá como parámetros el intervalo final del sumatorio (M), el número de tareas a generar
+    (N) y la dirección donde se ejecuta el servidor de RMI (por defecto será localhost).
+    Sintaxis: DisSumMaster <intervalo_final_sum> <#trabajos> [<ip_servidor>]
+    */
+    public static void main(String[] args) throws RemoteException, MalformedURLException, NotBoundException {
         //Set parameters given
         long last = Integer.parseInt(args[0]); //numero final a sumar
         long jobs = Integer.parseInt(args[1]); //Nº tareas
@@ -15,8 +19,10 @@ public class DisSumMaster {
         if (args.length > 2){
             ip_server = args[3]; //ip servidor [localhost si no existe]
         }
-        //Create default queues
-        MsgQ queue = new MsgQServant(); //creamos un objeto tipo cola de mensajes
+        //Get default queues
+        String registration = "rmi://" + ip_server + "/prac1";
+        Remote remoteService = Naming.lookup(registration);
+        MsgQ queue = (MsgQ) remoteService;
         queue.MsgQ_CreateTopic("Work", EPublishMode.TOPIC); //usamos su método asociado para crear el Topic
         queue.MsgQ_CreateQueue("Results"); //usamos otro método para crear una cola tipo P2P
         //Distribute jobs
@@ -30,7 +36,7 @@ public class DisSumMaster {
             }else if (i == jobs-1){ //last interval - treated differently
                 first_sum = last_sum+1;
                 message = first_sum + "-" + last;
-            } else { //center intervales - treated equally
+            } else { //center intervals - treated equally
                 first_sum = last_sum + 1;
                 last_sum = last_sum + numeros_por_tarea;
                 message = first_sum + "-" + last_sum;
@@ -54,13 +60,6 @@ public class DisSumMaster {
     }
 
     private static long processMessage(String msg) {
-        StringTokenizer stok = new StringTokenizer(msg, "-");
-        long first = (long) stok.nextElement();
-        long last = (long) stok.nextElement();
-        long res = 0;
-        for (long i=first; i<last; i++){
-            res+=i;
-        }
-        return res;
+        return Long.parseLong(msg);
     }
 }
