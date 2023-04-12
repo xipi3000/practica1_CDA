@@ -9,7 +9,8 @@ public class MsgQServant implements MsgQ, Runnable {
     private static final long serialVersionUID = 1;
 
     private Hashtable<String,Vector<Message>> clientQueues;
-    private TopicQueues topicQueues;
+    private Hashtable<String, TopicQueue> topicQueues;
+
     public MsgQServant() throws RemoteException{
 
     }
@@ -63,7 +64,7 @@ public class MsgQServant implements MsgQ, Runnable {
 
     }
     private void createTopic(String topicname, EPublishMode mode){
-        topicQueues.topicQueues.put(topicname,new Vector<Message>());
+        topicQueues.put(topicname,new TopicQueue(mode));
     }
     public  EMomError MsgQ_CreateTopic(String topicname, EPublishMode mode) throws RemoteException{
         createTopic(topicname, mode);
@@ -75,17 +76,17 @@ public class MsgQServant implements MsgQ, Runnable {
     }
 
     private void closeTopic(String topicname) {
-        topicQueues.topicQueues.remove(topicname);
+        topicQueues.remove(topicname);
     }
 
     public  EMomError MsgQ_Publish(String topic, String message, int type) throws RemoteException{
-        topicQueues.topicQueues.get(topic).add(new Message(message,type));
+        topicQueues.get(topic).addMsg(new Message(message,type));
 
 
         return null;
     }
     public  EMomError MsgQ_Subscribe(String topic, TopicListenerInterface listener) throws RemoteException{
-
+        topicQueues.get(topic).subscribe(listener);
         return null;
     }
 
