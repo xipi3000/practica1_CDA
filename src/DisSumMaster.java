@@ -6,9 +6,12 @@ public class DisSumMaster {
     El programa máster recibirá como parámetros el intervalo final del sumatorio (M), el número de tareas a generar
     (N) y la dirección donde se ejecuta el servidor de RMI (por defecto será localhost).
     Sintaxis: DisSumMaster <intervalo_final_sum> <#trabajos> [<ip_servidor>]
+
+    FALTARÀ EL TEMA DE XML/JSON
     */
     public static void main(String[] args) throws RemoteException{
         //Set parameters given
+        /*CONTROL D'ERRORS*/
         long last = Integer.parseInt(args[0]); //numero final a sumar
         long jobs = Integer.parseInt(args[1]); //Nº tareas
         //Get default queues
@@ -18,7 +21,7 @@ public class DisSumMaster {
         }
         MsgQClient client = new MsgQClient();
         client.MsqQ_Init(reg);
-        client.MsgQ_CreateTopic("Work", EPublishMode.TOPIC); //usamos su método asociado para crear el Topic
+        client.MsgQ_CreateTopic("Work", EPublishMode.RoundRobin); //usamos su método asociado para crear el Topic
         client.MsgQ_CreateQueue("Results"); //usamos otro método para crear una cola tipo P2P
         //Distribute jobs
         long numeros_por_tarea = last / jobs; //proporción numeros a sumar por tarea
