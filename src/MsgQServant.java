@@ -64,18 +64,6 @@ public class MsgQServant implements MsgQ, Runnable {
 
     }
 
-    private int FIFOSeach(Vector<Message> messages,int type){
-
-        for(int i = 0;i<messages.size();i++){
-            if(messages.get(i).type == type){
-                return i;
-            }
-
-        }
-        return -1;
-
-    }
-
     public String MsgQ_ReceiveMessage(String msgqname,int type) throws RemoteException{
         return  receiveMessage(msgqname,type);
     }
@@ -91,7 +79,15 @@ public class MsgQServant implements MsgQ, Runnable {
         }
         return "Error, no existeix la cua!";
     }
+    private int FIFOSeach(Vector<Message> messages,int type){
 
+        for(int i = 0;i<messages.size();i++){
+            if(messages.get(i).type == type){
+                return i;
+            }
+        }
+        return -1;
+    }
 
     public  EMomError MsgQ_CreateTopic(String topicname, EPublishMode mode) throws RemoteException{
         createTopic(topicname, mode);
