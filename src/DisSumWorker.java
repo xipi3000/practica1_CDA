@@ -47,7 +47,6 @@ public class DisSumWorker implements TopicListenerInterface{
     public static long calcularSumaPrimos(long begin,long end) {
         long sumaPrimos = 0;
         long numero;
-
         for (numero=begin; numero<end; numero++)
         {
             if (numero % 2 != 0) {
@@ -56,7 +55,6 @@ public class DisSumWorker implements TopicListenerInterface{
                 }
             }
         }
-
         return sumaPrimos;
     }
 
