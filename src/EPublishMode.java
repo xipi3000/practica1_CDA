@@ -1,4 +1,3 @@
 public enum EPublishMode {
-    TOPIC,
-    P2P
+    Broadcast,RoundRobin
 }
