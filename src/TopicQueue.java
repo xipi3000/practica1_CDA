@@ -24,7 +24,8 @@ public class TopicQueue {
                     listenerQueue.remove(listener);
                 }
             }
-        } else if (publishMode== EPublishMode.Broadcast) {
+        }
+        else if (publishMode== EPublishMode.Broadcast) {
             for (Enumeration e = listenerQueue.elements(); e.hasMoreElements(); ) {
                 TopicListenerInterface listener = (TopicListenerInterface) e.nextElement();
                 try {

@@ -15,7 +15,7 @@ public class MsgQClient implements TopicListenerInterface {
     public void MsqQ_Init(String ServerAddress) {
 
         // Registration format //registry_hostname (optional):port /service
-        String registration = "rmi://" + ServerAddress + "/BombillaRMICallbacks";
+        String registration = "rmi://" + ServerAddress + "/MOMyservice";
 
         // Lookup the service in the registry, and obtain a remote service
         Remote remoteService = null;
