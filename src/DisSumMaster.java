@@ -1,5 +1,6 @@
-import java.rmi.RemoteException;
+import java.io.IOException;
 import static java.lang.System.exit;
+import static java.lang.Thread.sleep;
 
 public class DisSumMaster {
     /*
@@ -9,7 +10,7 @@ public class DisSumMaster {
 
     FALTARÀ EL TEMA DE XML/JSON
     */
-    public static void main(String[] args) throws RemoteException{
+    public static void main(String[] args) throws IOException, InterruptedException {
         //Set parameters given
         /*CONTROL D'ERRORS*/
         if (args.length < 2){
@@ -21,7 +22,10 @@ public class DisSumMaster {
         //Get default queues
         String reg = "localhost";
         if(args.length > 2){
-            reg = args[0];
+            reg = args[2];
+        }
+        for (int i=0; i<jobs; i++){
+            Runtime.getRuntime().exec("java DisSumWorker");
         }
         MsgQClient client = new MsgQClient();
         client.MsqQ_Init(reg);
@@ -44,6 +48,7 @@ public class DisSumMaster {
                 message = first_sum + "-" + last_sum;
             }
             client.MsgQ_Publish("Work", message, 1); //type = 1 -> intervals
+            System.out.println("He publicat a Work");
         }
         //Wait for results (since it's not blocking, we need the counter and to check for not null)
         int jobs_done = 0;
@@ -51,10 +56,14 @@ public class DisSumMaster {
         while (jobs_done < jobs){
             String msg = client.MsgQ_ReceiveMessage("Results", 2); //Type s'haurà de mirar
             if (msg != null){
+                System.out.println("Llegida cua de results");
                 jobs_done++;
                 long partialRes = processMessage(msg);
                 res+=partialRes;
+            } else{
+                System.out.println("Llegida cua de results, no hi havia res");
             }
+            sleep(5000);
         }
         System.out.println("S'ha acabat de sumar, resultat final: "+res);
         //Close queues after finishing job

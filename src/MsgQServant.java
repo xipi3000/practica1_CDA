@@ -1,7 +1,5 @@
-import java.lang.reflect.Array;
 import java.rmi.RemoteException;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
 
@@ -75,7 +73,7 @@ public class MsgQServant implements MsgQ, Runnable {
                 Message msg = clientQueues.get(msgqname).remove(it);
                 return msg.message;
             }
-            return "Error, no queden missatges!";
+            return null; //crec que això hauria de ser un null ["Error, no queden missatges!"]
         }
         return "Error, no existeix la cua!";
     }

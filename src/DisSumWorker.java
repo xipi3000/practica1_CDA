@@ -4,10 +4,10 @@ import java.util.StringTokenizer;
 
 public class DisSumWorker implements TopicListenerInterface{
     long tareas_calculadas;
-    MsgQClient client;
+    static MsgQClient client;
     public DisSumWorker(){}
     //FALTARÀ EL TEMA DE XML/JSON
-    public void main(String[] args) throws RemoteException {
+    public static void main(String[] args) throws RemoteException {
         //get queue from client implementation
         String reg = "localhost";
         if(args.length > 0){
@@ -20,27 +20,26 @@ public class DisSumWorker implements TopicListenerInterface{
         TopicListenerInterface listener = (TopicListenerInterface) UnicastRemoteObject.exportObject(listen, 0);
         client.MsgQ_Subscribe("Log", listener);
         //sub to Work
-        DisSumWorker listen2 = new DisSumWorker();
-        client.MsgQ_Subscribe("Work", listen2); //ENLLOC DE LISTENER, LA FUNCIÓ DE CALCUL DE PRIMERS
+        client.MsgQ_Subscribe("Work", listener);
+        client.MsgQ_SendMessage("Results", "Ha funcionat el main", 0);
     }
 
     //S'haurà d'assegurar que es treballa en RoundRobin per a que això funcioni
     @Override
     public void onTopicMessage(String message) throws RemoteException {
+        System.out.println("S'ESTÀ EXECUTANT LA DE WORKER");
         StringTokenizer stok = new StringTokenizer(message, "-");
-        long first = (long) stok.nextElement();
-        long last = (long) stok.nextElement();
-        long res = calcularSumaPrimos(first, last);
-        client.MsgQ_SendMessage("Results", String.valueOf(res), 2);
-        this.tareas_calculadas++;
+        String first = stok.nextElement().toString();
+        String last = stok.nextElement().toString();
+        System.out.println("First: "+first);
+        System.out.println("Last: "+last);
+        //long res = calcularSumaPrimos(first, last);
+        //client.MsgQ_SendMessage("Results", String.valueOf(res), 2);
+        //this.tareas_calculadas++;
     }
 
     @Override
     public void onTopicClosed(String topic) throws RemoteException {
-        /*
-        Una vez el trabajador sea notificado que la cola “Work” ha sido cerrada, el programa finalizará mostrando por
-        pantalla el número de tareas que ha procesado.
-        */
         System.out.println("Se ha terminado la ejecución del programa.");
         System.out.println("Tareas calculadas: "+tareas_calculadas);
     }

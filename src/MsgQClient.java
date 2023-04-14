@@ -65,6 +65,7 @@ public class MsgQClient implements TopicListenerInterface {
 
     @Override
     public void onTopicMessage(String message) throws RemoteException {
+        System.out.println("S'ESTÀ EXECUTANT LA DE CLIENT");
         System.out.println(message);
     }
 
@@ -73,16 +74,17 @@ public class MsgQClient implements TopicListenerInterface {
         System.out.println("S'ha tancat el topic: "+topic);
 
     }
-    public void main(String[] args) throws RemoteException{
+    public static void main(String[] args) throws RemoteException{
+        MsgQClient client = new MsgQClient();
         if(Objects.equals(args[0], "1")){
-            MsqQ_Init("localhost");
-            MsgQ_CreateTopic("nig",EPublishMode.Broadcast);
-            MsgQ_Subscribe("nig", msgQlistener);
+            client.MsqQ_Init("localhost");
+            client.MsgQ_CreateTopic("nig",EPublishMode.RoundRobin);
+            client.MsgQ_Subscribe("nig", msgQlistener);
             while (true);
         }
         else if (Objects.equals(args[0], "2")) {
-            MsqQ_Init("localhost");
-            MsgQ_Publish("nig","nor",0);
+            client.MsqQ_Init("localhost");
+            client.MsgQ_Publish("nig","nor",0);
             System.out.println("error5");
         }
     }
