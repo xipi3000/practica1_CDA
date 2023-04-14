@@ -25,7 +25,9 @@ public class DisSumMaster {
             reg = args[2];
         }
         for (int i=0; i<jobs; i++){
-            Runtime.getRuntime().exec("java DisSumWorker");
+            DisSumWorker w = new DisSumWorker(reg);
+            Thread thread = new Thread(w);
+            thread.start();
         }
         MsgQClient client = new MsgQClient();
         client.MsqQ_Init(reg);
@@ -54,7 +56,7 @@ public class DisSumMaster {
         int jobs_done = 0;
         long res = 0;
         while (jobs_done < jobs){
-            String msg = client.MsgQ_ReceiveMessage("Results", 2); //Type s'haurà de mirar
+            String msg = client.MsgQ_ReceiveMessage("Results", 0); //Type s'haurà de mirar
             if (msg != null){
                 System.out.println("Llegida cua de results");
                 jobs_done++;

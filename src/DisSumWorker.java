@@ -2,40 +2,24 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.StringTokenizer;
 
-public class DisSumWorker implements TopicListenerInterface{
+public class DisSumWorker implements TopicListenerInterface, Runnable{
     long tareas_calculadas;
     static MsgQClient client;
-    public DisSumWorker(){}
-    //FALTARÀ EL TEMA DE XML/JSON
-    public static void main(String[] args) throws RemoteException {
-        //get queue from client implementation
-        String reg = "localhost";
-        if(args.length > 0){
-            reg = args[0];
-        }
-        client = new MsgQClient();
-        client.MsqQ_Init(reg);
-        //sub to Log
-        DisSumWorker listen = new DisSumWorker();
-        TopicListenerInterface listener = (TopicListenerInterface) UnicastRemoteObject.exportObject(listen, 0);
-        client.MsgQ_Subscribe("Log", listener);
-        //sub to Work
-        client.MsgQ_Subscribe("Work", listener);
-        client.MsgQ_SendMessage("Results", "Ha funcionat el main", 0);
+    static String reg;
+    public DisSumWorker(String serv){
+        reg = serv;
     }
-
+    //FALTARÀ EL TEMA DE XML/JSON
     //S'haurà d'assegurar que es treballa en RoundRobin per a que això funcioni
     @Override
     public void onTopicMessage(String message) throws RemoteException {
         System.out.println("S'ESTÀ EXECUTANT LA DE WORKER");
         StringTokenizer stok = new StringTokenizer(message, "-");
-        String first = stok.nextElement().toString();
-        String last = stok.nextElement().toString();
-        System.out.println("First: "+first);
-        System.out.println("Last: "+last);
-        //long res = calcularSumaPrimos(first, last);
-        //client.MsgQ_SendMessage("Results", String.valueOf(res), 2);
-        //this.tareas_calculadas++;
+        long first = Long.parseLong((String) stok.nextElement());
+        long last = Long.parseLong((String) stok.nextElement());
+        long res = calcularSumaPrimos(first, last);
+        client.MsgQ_SendMessage("Results", String.valueOf(res), 2);
+        this.tareas_calculadas++;
     }
 
     @Override
@@ -65,5 +49,21 @@ public class DisSumWorker implements TopicListenerInterface{
             }
         }
         return true;
+    }
+
+    @Override
+    public void run() {
+        try {
+            client = new MsgQClient();
+            client.MsqQ_Init(reg);
+            //sub to Log
+            DisSumWorker listen = new DisSumWorker(reg);
+            TopicListenerInterface listener = (TopicListenerInterface) UnicastRemoteObject.exportObject(listen, 0);
+            client.MsgQ_Subscribe("Log", listener);
+            //sub to Work
+            client.MsgQ_Subscribe("Work", listener);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

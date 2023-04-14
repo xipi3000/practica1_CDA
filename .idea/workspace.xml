@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="860d4be7-a091-4234-ab2e-65298a77c519" name="Changes" comment="few changes">
+    <list default="true" id="860d4be7-a091-4234-ab2e-65298a77c519" name="Changes" comment="worker doesn't print, but kinda works i think">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DisSumMaster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DisSumMaster.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DisSumWorker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DisSumWorker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MsgQClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MsgQClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MsgQServant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MsgQServant.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,7 +93,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681496465423</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="worker doesn't print, but kinda works i think">
+      <created>1681510725370</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1681510725370</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -112,6 +117,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init" />
     <MESSAGE value="few changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="few changes" />
+    <MESSAGE value="worker doesn't print, but kinda works i think" />
+    <option name="LAST_COMMIT_MESSAGE" value="worker doesn't print, but kinda works i think" />
   </component>
 </project>
