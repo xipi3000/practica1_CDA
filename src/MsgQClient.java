@@ -15,7 +15,7 @@ public class MsgQClient implements TopicListenerInterface {
     public void MsqQ_Init(String ServerAddress) {
 
         // Registration format //registry_hostname (optional):port /service
-        String registration = "rmi://" + ServerAddress + "/MOMyservice";
+        String registration = "rmi://" + ServerAddress + "/MOMYservice";
 
         // Lookup the service in the registry, and obtain a remote service
         Remote remoteService = null;
@@ -26,7 +26,7 @@ public class MsgQClient implements TopicListenerInterface {
 
             // Exportar el objeto de la clase de la implementación al stub del interfase.
             msgQlistener = (TopicListenerInterface) UnicastRemoteObject.exportObject(clientMonitor, 0);
-
+            System.out.println("S'ha connectat");
 
 
         } catch (NotBoundException e) {
@@ -76,7 +76,7 @@ public class MsgQClient implements TopicListenerInterface {
     public void main(String[] args) throws RemoteException{
         if(Objects.equals(args[0], "1")){
             MsqQ_Init("localhost");
-            MsgQ_CreateTopic("nig",null);
+            MsgQ_CreateTopic("nig",EPublishMode.Broadcast);
             MsgQ_Subscribe("nig", msgQlistener);
             while (true);
         }

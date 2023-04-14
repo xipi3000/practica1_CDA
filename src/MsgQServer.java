@@ -21,7 +21,7 @@ public class MsgQServer {
 
             // Enlazar el objeto remoto (stub) con el registro de RMI.
             Registry registry = LocateRegistry.getRegistry();
-            registry.rebind("MOMyservice", msgQ);
+            registry.rebind("MOMYservice", msgQ);
             System.err.println("Server ready");
 
             // Create a thread, and pass the sensor server.
