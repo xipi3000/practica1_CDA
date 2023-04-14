@@ -24,6 +24,7 @@ public class DisSumWorker implements TopicListenerInterface{
         client.MsgQ_Subscribe("Work", listen2); //ENLLOC DE LISTENER, LA FUNCIÓ DE CALCUL DE PRIMERS
     }
 
+    //S'haurà d'assegurar que es treballa en RoundRobin per a que això funcioni
     @Override
     public void onTopicMessage(String message) throws RemoteException {
         StringTokenizer stok = new StringTokenizer(message, "-");

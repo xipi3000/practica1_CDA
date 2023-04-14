@@ -6,10 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="860d4be7-a091-4234-ab2e-65298a77c519" name="Changes" comment="init">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MsgQClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MsgQClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MsgQServant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MsgQServant.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MsgQServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MsgQServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TopicQueue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TopicQueue.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +21,32 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <excluded-from-favorite>
+      <branch-storage>
+        <map>
+          <entry type="REMOTE">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="origin/master" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </excluded-from-favorite>
+    <favorite-branches>
+      <branch-storage>
+        <map>
+          <entry type="REMOTE">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="origin/client" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </favorite-branches>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
         <entry key="$PROJECT_DIR$" value="middleware" />
@@ -82,7 +104,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="client" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
