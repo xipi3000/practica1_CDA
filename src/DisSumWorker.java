@@ -19,6 +19,7 @@ public class DisSumWorker implements TopicListenerInterface, Runnable{
         long first = Long.parseLong((String) stok.nextElement());
         long last = Long.parseLong((String) stok.nextElement());
         long res = calcularSumaPrimos(first, last);
+        System.out.println("Res listener: "+res);
         if(client.MsgQ_SendMessage("Results", String.valueOf(res), 2)== EMomError.NoExisteixMsgQ) throw new RuntimeException("No existeix la cua");
         this.tareas_calculadas++;
     }

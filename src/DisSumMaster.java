@@ -44,10 +44,10 @@ public class DisSumMaster {
                 last_sum = numeros_por_tarea;
                 message = "1-" + last_sum;
             }else if (i == jobs-1){ //last interval - treated differently
-                first_sum = last_sum+1;
+                first_sum = last_sum;
                 message = first_sum + "-" + last;
             } else { //center intervals - treated equally
-                first_sum = last_sum + 1;
+                first_sum = last_sum;
                 last_sum = last_sum + numeros_por_tarea;
                 message = first_sum + "-" + last_sum;
             }
