@@ -31,7 +31,7 @@ public class MsgQServant implements MsgQ, Runnable {
 
     private EMomError createQueue(String msgqname) {
         if(!existeixMsgQ(msgqname)) {
-            clientQueues.put(msgqname, new Stack<>());
+            clientQueues.put(msgqname, new Vector<>());
             return EMomError.NoError;
         }
         return EMomError.JaExisteixMsgQ;
@@ -125,11 +125,13 @@ public class MsgQServant implements MsgQ, Runnable {
     }
 
     public  EMomError MsgQ_Subscribe(String topic, TopicListenerInterface listener) throws RemoteException{
+
         return subscribe(topic,listener);
     }
 
     public  EMomError subscribe(String topic, TopicListenerInterface listener){
         if(existeixTopicQ(topic)) {
+            System.out.println("Listener:  subscribed");
             topicQueues.get(topic).subscribe(listener);
             return EMomError.NoError;
         }

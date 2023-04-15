@@ -24,15 +24,17 @@ public class DisSumMaster {
         if(args.length > 2){
             reg = args[2];
         }
+        MsgQClient client = new MsgQClient();
+        client.MsqQ_Init(reg);
+        client.MsgQ_CreateTopic("Work", EPublishMode.RoundRobin); //usamos su método asociado para crear el Topic
+        client.MsgQ_CreateTopic("Log", EPublishMode.Broadcast); //usamos su método asociado para crear el Topic
+        client.MsgQ_CreateQueue("Results"); //usamos otro método para crear una cola tipo P2P
         for (int i=0; i<jobs; i++){
             DisSumWorker w = new DisSumWorker(reg);
             Thread thread = new Thread(w);
             thread.start();
         }
-        MsgQClient client = new MsgQClient();
-        client.MsqQ_Init(reg);
-        client.MsgQ_CreateTopic("Work", EPublishMode.RoundRobin); //usamos su método asociado para crear el Topic
-        client.MsgQ_CreateQueue("Results"); //usamos otro método para crear una cola tipo P2P
+        sleep(3000);
         //Distribute jobs
         int numeros_por_tarea = (int)(last / jobs); //proporción numeros a sumar por tarea
         String message;
@@ -55,8 +57,9 @@ public class DisSumMaster {
         //Wait for results (since it's not blocking, we need the counter and to check for not null)
         int jobs_done = 0;
         long res = 0;
+        sleep(3000);
         while (jobs_done < jobs){
-            String msg = client.MsgQ_ReceiveMessage("Results", 0); //Type s'haurà de mirar
+            String msg = client.MsgQ_ReceiveMessage("Results", 2); //Type s'haurà de mirar
             if (msg != null){
                 System.out.println("Llegida cua de results");
                 jobs_done++;
@@ -65,7 +68,7 @@ public class DisSumMaster {
             } else{
                 System.out.println("Llegida cua de results, no hi havia res");
             }
-            sleep(5000);
+
         }
         System.out.println("S'ha acabat de sumar, resultat final: "+res);
         //Close queues after finishing job

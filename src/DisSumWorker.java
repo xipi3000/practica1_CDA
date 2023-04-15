@@ -14,11 +14,12 @@ public class DisSumWorker implements TopicListenerInterface, Runnable{
     @Override
     public void onTopicMessage(String message) throws RemoteException {
         System.out.println("S'ESTÀ EXECUTANT LA DE WORKER");
+        System.out.println("Listener recieved: " + message);
         StringTokenizer stok = new StringTokenizer(message, "-");
         long first = Long.parseLong((String) stok.nextElement());
         long last = Long.parseLong((String) stok.nextElement());
         long res = calcularSumaPrimos(first, last);
-        client.MsgQ_SendMessage("Results", String.valueOf(res), 2);
+        if(client.MsgQ_SendMessage("Results", String.valueOf(res), 2)== EMomError.NoExisteixMsgQ) throw new RuntimeException("No existeix la cua");
         this.tareas_calculadas++;
     }
 
@@ -54,14 +55,14 @@ public class DisSumWorker implements TopicListenerInterface, Runnable{
     @Override
     public void run() {
         try {
+            System.out.println("Listener creat");
             client = new MsgQClient();
             client.MsqQ_Init(reg);
             //sub to Log
             DisSumWorker listen = new DisSumWorker(reg);
             TopicListenerInterface listener = (TopicListenerInterface) UnicastRemoteObject.exportObject(listen, 0);
-            client.MsgQ_Subscribe("Log", listener);
-            //sub to Work
-            client.MsgQ_Subscribe("Work", listener);
+            if(client.MsgQ_Subscribe("Log", listener)==EMomError.NoExisteixTopicQ) throw new RuntimeException("No existeix una cua");
+            if(client.MsgQ_Subscribe("Work", listener)==EMomError.NoExisteixTopicQ) throw new RuntimeException("No existeix una cua");
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

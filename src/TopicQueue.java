@@ -15,11 +15,14 @@ public class TopicQueue {
     }
     public void addMsg(Message message){
         topicQueue.add(message);
+        System.out.println("Arriva missatge");
         if(publishMode== EPublishMode.RoundRobin) {
+            System.out.println("Round Robin");
             for (Enumeration e = listenerQueue.elements(); e.hasMoreElements(); ) {
                 TopicListenerInterface listener = (TopicListenerInterface) e.nextElement();
                 if(!roundRobinQueue.contains(listener)){
                     try {
+
                         listener.onTopicMessage(message.message);
                     } catch (RemoteException re) {
                         System.out.println(" Listener not accessible, removing listener -" + listener);
@@ -43,6 +46,7 @@ public class TopicQueue {
             for (Enumeration e = listenerQueue.elements(); e.hasMoreElements(); ) {
                 TopicListenerInterface listener = (TopicListenerInterface) e.nextElement();
                 try {
+                    System.out.println("Broadcast");
                     listener.onTopicMessage(message.message);
                 } catch (RemoteException re) {
                     System.out.println(" Listener not accessible, removing listener -" + listener);
