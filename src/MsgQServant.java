@@ -73,7 +73,7 @@ public class MsgQServant implements MsgQ, Runnable {
                 Message msg = clientQueues.get(msgqname).remove(it);
                 return msg.message;
             }
-            return null; //crec que això hauria de ser un null ["Error, no queden missatges!"]
+            return null;
         }
         return "Error, no existeix la cua!";
     }
