@@ -21,14 +21,21 @@ public class DisSumWorker implements TopicListenerInterface, Runnable{
         reg = serv;
         barrier = barr;
     }
+
     @Override
     public void onTopicMessage(String message) throws RemoteException {
         StringTokenizer stok = new StringTokenizer(message, "-");
-        long first = Long.parseLong((String) stok.nextElement());
-        long last = Long.parseLong((String) stok.nextElement());
-        long res = calcularSumaPrimos(first, last);
-        if(client.MsgQ_SendMessage("Results", String.valueOf(res), 2)== EMomError.NoExisteixMsgQ) throw new RuntimeException("No existeix la cua");
-        this.tareas_calculadas++;
+        try{
+            long first = Long.parseLong((String) stok.nextElement());
+            long last = Long.parseLong((String) stok.nextElement());
+            long res = calcularSumaPrimos(first, last);
+            if(client.MsgQ_SendMessage("Results", String.valueOf(res), 2)== EMomError.NoExisteixMsgQ) throw new RuntimeException("No existeix la cua");
+            this.tareas_calculadas++;
+        }catch(NumberFormatException e){
+            System.out.println(message);
+        }
+
+
     }
 
     @Override
