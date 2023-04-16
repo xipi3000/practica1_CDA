@@ -34,8 +34,6 @@ public class DisSumWorker implements TopicListenerInterface, Runnable{
         }catch(NumberFormatException e){
             System.out.println(message);
         }
-
-
     }
 
     @Override
