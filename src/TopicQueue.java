@@ -1,3 +1,4 @@
+import java.io.*;
 import java.rmi.RemoteException;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -13,49 +14,65 @@ public class TopicQueue {
         this.listenerQueue = new Vector<>();
         this.roundRobinQueue = new Vector<>();
     }
-    public void addMsg(Message message){
+    public void addMsg(Message message,String topic){
         topicQueue.add(message);
-        System.out.println("Arriva missatge");
-        if(publishMode== EPublishMode.RoundRobin) {
-            System.out.println("Round Robin");
-            for (Enumeration e = listenerQueue.elements(); e.hasMoreElements(); ) {
-                TopicListenerInterface listener = (TopicListenerInterface) e.nextElement();
-                if(!roundRobinQueue.contains(listener)){
-                    try {
+        if(topic=="Log") {
+            try {
+                System.out.println("Arriva missatge");
+                File f1 = new File("operations.log");
+                if(!f1.exists()) {
+                    f1.createNewFile();
+                }
+                FileWriter fileWritter = new FileWriter(f1.getName(),true);
+                BufferedWriter bw = new BufferedWriter(fileWritter);
+                bw.write(message.message+"\n");
+                bw.close();
+            } catch (IOException e) {
+                System.out.println("An error occurred.");
+                e.printStackTrace();
+            }
+        }
+        else{
+            System.out.println("Arriva missatge");
+            if (publishMode == EPublishMode.RoundRobin) {
+                System.out.println("Round Robin");
+                for (Enumeration e = listenerQueue.elements(); e.hasMoreElements(); ) {
+                    TopicListenerInterface listener = (TopicListenerInterface) e.nextElement();
+                    if (!roundRobinQueue.contains(listener)) {
+                        try {
 
-                        listener.onTopicMessage(message.message);
+                            listener.onTopicMessage(message.message, topic);
+                        } catch (RemoteException re) {
+                            System.out.println(" Listener not accessible, removing listener -" + listener);
+                            // Remote the listener
+                            listenerQueue.remove(listener);
+                            roundRobinQueue.remove(listener);
+                        }
+                        roundRobinQueue.add(listener);
+                        break;
+                    } else if (roundRobinQueue.size() == listenerQueue.size()) {
+                        roundRobinQueue.clear();
+                        e = listenerQueue.elements();
+                    }
+
+
+                }
+            } else if (publishMode == EPublishMode.Broadcast) {
+
+                for (Enumeration e = listenerQueue.elements(); e.hasMoreElements(); ) {
+                    TopicListenerInterface listener = (TopicListenerInterface) e.nextElement();
+                    try {
+                        System.out.println("Broadcast");
+                        listener.onTopicMessage(message.message, topic);
                     } catch (RemoteException re) {
                         System.out.println(" Listener not accessible, removing listener -" + listener);
                         // Remote the listener
                         listenerQueue.remove(listener);
-                        roundRobinQueue.remove(listener);
                     }
-                    roundRobinQueue.add(listener);
-                    break;
-                }
-                else if (roundRobinQueue.size()==listenerQueue.size()) {
-                    roundRobinQueue.clear();
-                    e = listenerQueue.elements();
-                }
-
-
-            }
-        }
-        else if (publishMode== EPublishMode.Broadcast) {
-
-            for (Enumeration e = listenerQueue.elements(); e.hasMoreElements(); ) {
-                TopicListenerInterface listener = (TopicListenerInterface) e.nextElement();
-                try {
-                    System.out.println("Broadcast");
-                    listener.onTopicMessage(message.message);
-                } catch (RemoteException re) {
-                    System.out.println(" Listener not accessible, removing listener -" + listener);
-                    // Remote the listener
-                    listenerQueue.remove(listener);
                 }
             }
+            topicQueue.remove(message);
         }
-        topicQueue.remove(message);
     }
     public void subscribe(TopicListenerInterface listener){
         listenerQueue.add(listener);

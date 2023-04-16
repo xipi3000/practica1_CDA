@@ -5,6 +5,8 @@ Grau Informàtica
 XXXXXXXXX Pol Escolà
 49263877Q Antonio López Gómez
 --------------------------------------------------------------- */
+import java.io.FileWriter;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.StringTokenizer;
@@ -23,17 +25,20 @@ public class DisSumWorker implements TopicListenerInterface, Runnable{
     }
 
     @Override
-    public void onTopicMessage(String message) throws RemoteException {
+    public void onTopicMessage(String message,String topic) throws RemoteException {
+
         StringTokenizer stok = new StringTokenizer(message, "-");
-        try{
+        try {
             long first = Long.parseLong((String) stok.nextElement());
             long last = Long.parseLong((String) stok.nextElement());
             long res = calcularSumaPrimos(first, last);
-            if(client.MsgQ_SendMessage("Results", String.valueOf(res), 2)== EMomError.NoExisteixMsgQ) throw new RuntimeException("No existeix la cua");
+            if (client.MsgQ_SendMessage("Results", String.valueOf(res), 2) == EMomError.NoExisteixMsgQ)
+                throw new RuntimeException("No existeix la cua");
             this.tareas_calculadas++;
-        }catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             System.out.println(message);
         }
+
     }
 
     @Override

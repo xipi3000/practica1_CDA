@@ -5,9 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="860d4be7-a091-4234-ab2e-65298a77c519" name="Changes" comment="init">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_15_04_2023_0_55__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_15_04_2023_0_55__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_15_04_2023_0_57__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_15_04_2023_0_57__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_15_04_2023_13_00__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_15_04_2023_13_00__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_15_04_2023_17_05__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_15_04_2023_17_05__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DisSumMaster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DisSumMaster.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DisSumWorker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DisSumWorker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MsgQClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MsgQClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MsgQServant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MsgQServant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TopicListenerInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TopicListenerInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TopicQueue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TopicQueue.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

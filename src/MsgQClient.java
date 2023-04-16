@@ -64,8 +64,8 @@ public class MsgQClient implements TopicListenerInterface {
     }
 
     @Override
-    public void onTopicMessage(String message) throws RemoteException {
-        System.out.println(message);
+    public void onTopicMessage(String message,String topic) throws RemoteException {
+        //System.out.println(message);
     }
 
     @Override
