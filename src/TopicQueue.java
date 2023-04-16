@@ -65,7 +65,9 @@ public class TopicQueue {
             TopicListenerInterface listener = (TopicListenerInterface) e.nextElement();
             try {
                 listener.onTopicClosed(topic);
-                listenerQueue.remove( listener );
+                //Si es necessari buidar la llista, fem un .clear al acabar el for. Sino simplement treiem-ho, perque
+                //amb això funciona mal.
+                //listenerQueue.remove( listener );
             }
             catch (RemoteException re)
             {

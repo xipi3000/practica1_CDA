@@ -65,7 +65,6 @@ public class MsgQClient implements TopicListenerInterface {
 
     @Override
     public void onTopicMessage(String message) throws RemoteException {
-        System.out.println("S'ESTÀ EXECUTANT LA DE CLIENT");
         System.out.println(message);
     }
 
