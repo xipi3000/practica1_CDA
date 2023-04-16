@@ -97,8 +97,10 @@ public class MsgQServant implements MsgQ, Runnable {
     private EMomError createTopic(String topicname, EPublishMode mode){
         if(!existeixTopicQ(topicname)){
             topicQueues.put(topicname,new TopicQueue(mode));
+            addToLog("Created new topic queue "+topicname+", with mode " + mode);
             return EMomError.NoError;
         }
+        addToLog("Couldn't create new topic queue "+topicname);
         return EMomError.JaExisteixTopicQ;
     }
 
@@ -110,8 +112,10 @@ public class MsgQServant implements MsgQ, Runnable {
         if(existeixTopicQ(topicname)){
             topicQueues.get(topicname).remove(topicname);
             topicQueues.remove(topicname);
+            addToLog("Topic "+topicname+" was closed");
             return EMomError.NoError;
         }
+        addToLog("Couldn't close topic queue "+topicname);
         return EMomError.NoExisteixTopicQ;
     }
 
@@ -121,8 +125,10 @@ public class MsgQServant implements MsgQ, Runnable {
     public  EMomError publish(String topic, String message, int type){
         if(existeixTopicQ(topic)){
             topicQueues.get(topic).addMsg(new Message(message,type));
+            addToLog("Client published message: "+message+", at topic: "+topic);
             return EMomError.NoError;
         }
+        addToLog("Client couldn't publish at topic: "+topic);
         return EMomError.NoExisteixTopicQ;
     }
 
@@ -133,12 +139,21 @@ public class MsgQServant implements MsgQ, Runnable {
     public  EMomError subscribe(String topic, TopicListenerInterface listener){
         if(existeixTopicQ(topic)) {
             topicQueues.get(topic).subscribe(listener);
+            addToLog("Client subscribed at topic: "+topic);
             return EMomError.NoError;
         }
+        addToLog("Client couldn't subscribed at topic: "+topic);
         return  EMomError.NoExisteixTopicQ;
+    }
+
+    private void addToLog(String logMsg){
+        publish("Log",System.currentTimeMillis()/1000+logMsg,0);
     }
 
     @Override
     public void run() {
+        createTopic("Log",EPublishMode.Broadcast);
+
     }
 }
+
