@@ -32,8 +32,10 @@ public class MsgQServant implements MsgQ, Runnable {
     private EMomError createQueue(String msgqname) {
         if(!existeixMsgQ(msgqname)) {
             clientQueues.put(msgqname, new Vector<>());
+            addToLog("Message queue "+msgqname+" created");
             return EMomError.NoError;
         }
+        addToLog("Error: Couldn't create message queue "+ msgqname+", it already exisits");
         return EMomError.JaExisteixMsgQ;
     }
 
@@ -44,8 +46,10 @@ public class MsgQServant implements MsgQ, Runnable {
     private EMomError closeQueue(String msgqname) {
         if(clientQueues.get(msgqname)!=null){
             clientQueues.remove(msgqname);
+            addToLog("Mesage queue "+msgqname+" closed");
             return EMomError.NoError;
         }
+        addToLog("Couldn't close message queue "+msgqname+", it doesn't exist");
         return EMomError.NoExisteixMsgQ;
     }
 
@@ -56,8 +60,10 @@ public class MsgQServant implements MsgQ, Runnable {
     private EMomError sendMessage(String msgqname, String message, int type) {
         if(existeixMsgQ(msgqname)){
             clientQueues.get(msgqname).add(new Message(message,type));
+            addToLog("Message "+message+" sent to message queue "+ msgqname );
             return EMomError.NoError;
         }
+        addToLog("Couldn't send message, queue "+ msgqname+ " doesn't exist");
         return EMomError.NoExisteixMsgQ;
 
     }
@@ -71,10 +77,13 @@ public class MsgQServant implements MsgQ, Runnable {
             int it = FIFOSeach(clientQueues.get(msgqname), type);
             if (it != -1) {
                 Message msg = clientQueues.get(msgqname).remove(it);
+                addToLog("Message "+msgqname+" recieved");
                 return msg.message;
             }
-            return null;
+            addToLog("No messages found at queue"+msgqname);
+            return null; //crec que això hauria de ser un null ["Error, no queden missatges!"]
         }
+        addToLog(msgqname+" queue doesn't exist");
         return "Error, no existeix la cua!";
     }
     private int FIFOSeach(Vector<Message> messages,int type){
@@ -95,8 +104,10 @@ public class MsgQServant implements MsgQ, Runnable {
     private EMomError createTopic(String topicname, EPublishMode mode){
         if(!existeixTopicQ(topicname)){
             topicQueues.put(topicname,new TopicQueue(mode));
+            addToLog("Created new topic queue "+topicname+", with mode " + mode);
             return EMomError.NoError;
         }
+        addToLog("Couldn't create new topic queue "+topicname);
         return EMomError.JaExisteixTopicQ;
     }
 
@@ -108,8 +119,10 @@ public class MsgQServant implements MsgQ, Runnable {
         if(existeixTopicQ(topicname)){
             topicQueues.get(topicname).remove(topicname);
             topicQueues.remove(topicname);
+            addToLog("Topic "+topicname+" was closed");
             return EMomError.NoError;
         }
+        addToLog("Couldn't close topic queue "+topicname);
         return EMomError.NoExisteixTopicQ;
     }
 
@@ -119,8 +132,10 @@ public class MsgQServant implements MsgQ, Runnable {
     public  EMomError publish(String topic, String message, int type){
         if(existeixTopicQ(topic)){
             topicQueues.get(topic).addMsg(new Message(message,type));
+            addToLog("Client published message: "+message+", at topic: "+topic);
             return EMomError.NoError;
         }
+        addToLog("Client couldn't publish at topic: "+topic);
         return EMomError.NoExisteixTopicQ;
     }
 
@@ -133,12 +148,19 @@ public class MsgQServant implements MsgQ, Runnable {
         if(existeixTopicQ(topic)) {
             System.out.println("Listener:  subscribed");
             topicQueues.get(topic).subscribe(listener);
+            addToLog("Client subscribed at topic: "+topic);
             return EMomError.NoError;
         }
+        addToLog("Client couldn't subscribed at topic: "+topic);
         return  EMomError.NoExisteixTopicQ;
+    }
+
+    private void addToLog(String logMsg){
+        publish("Log",System.currentTimeMillis()/1000+logMsg,0);
     }
 
     @Override
     public void run() {
+        createTopic("Log",EPublishMode.Broadcast);
     }
 }
