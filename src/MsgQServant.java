@@ -32,8 +32,10 @@ public class MsgQServant implements MsgQ, Runnable {
     private EMomError createQueue(String msgqname) {
         if(!existeixMsgQ(msgqname)) {
             clientQueues.put(msgqname, new Vector<>());
+            addToLog("Message queue "+msgqname+" created");
             return EMomError.NoError;
         }
+        addToLog("Error: Couldn't create message queue "+ msgqname+", it already exisits");
         return EMomError.JaExisteixMsgQ;
     }
 
@@ -44,8 +46,10 @@ public class MsgQServant implements MsgQ, Runnable {
     private EMomError closeQueue(String msgqname) {
         if(clientQueues.get(msgqname)!=null){
             clientQueues.remove(msgqname);
+            addToLog("Mesage queue "+msgqname+" closed");
             return EMomError.NoError;
         }
+        addToLog("Couldn't close message queue "+msgqname+", it doesn't exist");
         return EMomError.NoExisteixMsgQ;
     }
 
@@ -56,8 +60,10 @@ public class MsgQServant implements MsgQ, Runnable {
     private EMomError sendMessage(String msgqname, String message, int type) {
         if(existeixMsgQ(msgqname)){
             clientQueues.get(msgqname).add(new Message(message,type));
+            addToLog("Message "+message+" sent to message queue "+ msgqname );
             return EMomError.NoError;
         }
+        addToLog("Couldn't send message, queue "+ msgqname+ " doesn't exist");
         return EMomError.NoExisteixMsgQ;
 
     }
