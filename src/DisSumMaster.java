@@ -71,6 +71,7 @@ public class DisSumMaster {
         //Close queues after finishing job
         client.MsgQ_CloseTopic("Work");
         client.MsgQ_CloseQueue("Results");
+        exit(0);
     }
 
     private static long processMessage(String msg) {

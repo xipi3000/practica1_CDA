@@ -13,6 +13,7 @@ import java.util.concurrent.CyclicBarrier;
 
 public class DisSumWorker implements TopicListenerInterface, Runnable{
     long tareas_calculadas;
+    boolean work_exists = false;
     static MsgQClient client;
     static String reg;
     CyclicBarrier barrier;
@@ -31,8 +32,9 @@ public class DisSumWorker implements TopicListenerInterface, Runnable{
     }
 
     @Override
-    public void onTopicClosed(String topic) throws RemoteException {
+    public void onTopicClosed(String topic) {
         System.out.println("Se ha terminado la ejecucion del programa. Se han calculado "+tareas_calculadas+" tareas.");
+        work_exists=false;
     }
 
     public static long calcularSumaPrimos(long begin,long end) {
@@ -67,8 +69,11 @@ public class DisSumWorker implements TopicListenerInterface, Runnable{
             TopicListenerInterface listener = (TopicListenerInterface) UnicastRemoteObject.exportObject(listen, 0);
             if(client.MsgQ_Subscribe("Log", listener)==EMomError.NoExisteixTopicQ) throw new RuntimeException("No existeix una cua");
             if(client.MsgQ_Subscribe("Work", listener)==EMomError.NoExisteixTopicQ) throw new RuntimeException("No existeix una cua");
+            work_exists = true;
             //Sync with master now that all have subscribed to Work queue
             barrier.await();
+            while(work_exists);
+            Thread.currentThread().join();
         } catch (RemoteException | BrokenBarrierException | InterruptedException e) {
             throw new RuntimeException(e);
         }
