@@ -1,7 +1,5 @@
-import java.lang.reflect.Array;
 import java.rmi.RemoteException;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
 
@@ -33,7 +31,7 @@ public class MsgQServant implements MsgQ, Runnable {
 
     private EMomError createQueue(String msgqname) {
         if(!existeixMsgQ(msgqname)) {
-            clientQueues.put(msgqname, new Stack<>());
+            clientQueues.put(msgqname, new Vector<>());
             return EMomError.NoError;
         }
         return EMomError.JaExisteixMsgQ;
@@ -73,10 +71,13 @@ public class MsgQServant implements MsgQ, Runnable {
             int it = FIFOSeach(clientQueues.get(msgqname), type);
             if (it != -1) {
                 Message msg = clientQueues.get(msgqname).remove(it);
+                addToLog("Message "+msgqname+" recieved");
                 return msg.message;
             }
-            return "Error, no queden missatges!";
+            addToLog("No messages found at queue"+msgqname);
+            return null; //crec que això hauria de ser un null ["Error, no queden missatges!"]
         }
+        addToLog(msgqname+" queue doesn't exist");
         return "Error, no existeix la cua!";
     }
     private int FIFOSeach(Vector<Message> messages,int type){
@@ -133,11 +134,13 @@ public class MsgQServant implements MsgQ, Runnable {
     }
 
     public  EMomError MsgQ_Subscribe(String topic, TopicListenerInterface listener) throws RemoteException{
+
         return subscribe(topic,listener);
     }
 
     public  EMomError subscribe(String topic, TopicListenerInterface listener){
         if(existeixTopicQ(topic)) {
+            System.out.println("Listener:  subscribed");
             topicQueues.get(topic).subscribe(listener);
             addToLog("Client subscribed at topic: "+topic);
             return EMomError.NoError;
@@ -153,7 +156,5 @@ public class MsgQServant implements MsgQ, Runnable {
     @Override
     public void run() {
         createTopic("Log",EPublishMode.Broadcast);
-
     }
 }
-
