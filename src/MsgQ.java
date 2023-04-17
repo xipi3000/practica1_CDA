@@ -10,4 +10,6 @@ public interface MsgQ extends java.rmi.Remote
     EMomError MsgQ_CloseTopic(String topicname) throws RemoteException;
     EMomError MsgQ_Publish(String topic, String message, int type) throws RemoteException;
     EMomError MsgQ_Subscribe(String topic, TopicListenerInterface listener) throws RemoteException;
+    void MsgQ_Disconnect() throws RemoteException;
+    void MsgQ_Init()throws RemoteException;
 }

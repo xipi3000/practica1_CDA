@@ -28,6 +28,13 @@ public class MsgQServant implements MsgQ, Runnable {
         }
         return false;
     }
+    public void MsgQ_Init()throws RemoteException{
+        System.out.println("Client connected");
+    }
+    public void MsgQ_Disconnect()throws RemoteException{
+        System.out.println("Client disconnected");
+    }
+    @Override
     public EMomError MsgQ_CreateQueue(String msgqname) throws RemoteException {
         return createQueue(msgqname);
     }
@@ -41,7 +48,7 @@ public class MsgQServant implements MsgQ, Runnable {
         addToLog("Error: Couldn't create message queue "+ msgqname+", it already exisits");
         return EMomError.JaExisteixMsgQ;
     }
-
+    @Override
     public EMomError MsgQ_CloseQueue(String msgqname)throws RemoteException{
         return closeQueue(msgqname);
     }
@@ -55,7 +62,7 @@ public class MsgQServant implements MsgQ, Runnable {
         addToLog("Couldn't close message queue "+msgqname+", it doesn't exist");
         return EMomError.NoExisteixMsgQ;
     }
-
+    @Override
     public EMomError MsgQ_SendMessage(String msgqname, String message, int type) throws RemoteException{
         return sendMessage(msgqname,message,type);
     }
@@ -70,12 +77,12 @@ public class MsgQServant implements MsgQ, Runnable {
         return EMomError.NoExisteixMsgQ;
 
     }
-
+    @Override
     public String MsgQ_ReceiveMessage(String msgqname,int type) throws RemoteException{
         return  receiveMessage(msgqname,type);
     }
 
-    public String receiveMessage(String msgqname,int type) throws RemoteException{
+    public String receiveMessage(String msgqname,int type){
         if(existeixMsgQ(msgqname)) {
             int it = FIFOSeach(clientQueues.get(msgqname), type);
             if (it != -1) {
@@ -98,7 +105,7 @@ public class MsgQServant implements MsgQ, Runnable {
         }
         return -1;
     }
-
+    @Override
     public  EMomError MsgQ_CreateTopic(String topicname, EPublishMode mode) throws RemoteException{
         createTopic(topicname, mode);
         return null;
@@ -113,7 +120,7 @@ public class MsgQServant implements MsgQ, Runnable {
         addToLog("Couldn't create new topic queue "+topicname);
         return EMomError.JaExisteixTopicQ;
     }
-
+    @Override
     public EMomError MsgQ_CloseTopic(String topicname) throws RemoteException{
         return closeTopic(topicname);
     }
@@ -128,7 +135,7 @@ public class MsgQServant implements MsgQ, Runnable {
         addToLog("Couldn't close topic queue "+topicname);
         return EMomError.NoExisteixTopicQ;
     }
-
+    @Override
     public  EMomError MsgQ_Publish(String topic, String message, int type) throws RemoteException{
         return publish(topic,message,type);
     }
@@ -147,7 +154,7 @@ public class MsgQServant implements MsgQ, Runnable {
         addToLog("Client couldn't publish at topic: "+topic);
         return EMomError.NoExisteixTopicQ;
     }
-
+    @Override
     public  EMomError MsgQ_Subscribe(String topic, TopicListenerInterface listener) throws RemoteException{
 
         return subscribe(topic,listener);
@@ -155,7 +162,6 @@ public class MsgQServant implements MsgQ, Runnable {
 
     public  EMomError subscribe(String topic, TopicListenerInterface listener){
         if(existeixTopicQ(topic)) {
-            System.out.println("Listener:  subscribed");
             topicQueues.get(topic).subscribe(listener);
             addToLog("Client subscribed at topic: "+topic);
             return EMomError.NoError;

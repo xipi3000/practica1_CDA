@@ -1,27 +1,32 @@
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Hashtable;
 import java.util.Objects;
 
 public class MsgQClient implements TopicListenerInterface {
     private static MsgQ msgQ;
+    private static InitialContext ctx;
     private static TopicListenerInterface msgQlistener;
     public MsgQClient() throws RemoteException{
 
     }
     public void MsqQ_Init(String ServerAddress) {
+        final Hashtable jndiProperties = new Hashtable();
+        jndiProperties.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.rmi.registry.RegistryContextFactory");
+        jndiProperties.put(Context.PROVIDER_URL,"rmi://localhost:6969");
+        try{
+            ctx = new InitialContext(jndiProperties);
 
-        // Registration format //registry_hostname (optional):port /service
-        String registration = "rmi://" + ServerAddress + "/MOMYservice";
+            msgQ = (MsgQ) ctx.lookup("/jndi/MOMYservice");
+            msgQ.MsgQ_Init();
 
-        // Lookup the service in the registry, and obtain a remote service
-        Remote remoteService = null;
-        try {
-            remoteService = Naming.lookup ( registration );
-            msgQ = (MsgQ) remoteService;
             MsgQClient clientMonitor = new MsgQClient();
 
             // Exportar el objeto de la clase de la implementación al stub del interfase.
@@ -29,12 +34,23 @@ public class MsgQClient implements TopicListenerInterface {
             System.out.println("S'ha connectat");
 
 
-        } catch (NotBoundException e) {
-            System.out.println ("Bound Error - " + e);
-        } catch (MalformedURLException e) {
-            System.out.println ("Url Error - " + e);
+
+
         } catch (RemoteException e) {
             System.out.println ("RMI Error - " + e);
+        } catch (NamingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void MsgQ_Disconnect(){
+        try {
+            msgQ.MsgQ_Disconnect();
+            ctx.close();
+
+        } catch (NamingException e) {
+            throw new RuntimeException(e);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
         }
     }
     public EMomError MsgQ_CreateQueue(String msgqname) throws RemoteException {
@@ -74,17 +90,6 @@ public class MsgQClient implements TopicListenerInterface {
 
     }
     public static void main(String[] args) throws RemoteException{
-        MsgQClient client = new MsgQClient();
-        if(Objects.equals(args[0], "1")){
-            client.MsqQ_Init("localhost");
-            client.MsgQ_CreateTopic("nig",EPublishMode.RoundRobin);
-            client.MsgQ_Subscribe("nig", msgQlistener);
-            while (true);
-        }
-        else if (Objects.equals(args[0], "2")) {
-            client.MsqQ_Init("localhost");
-            client.MsgQ_Publish("nig","nor",0);
-            System.out.println("error5");
-        }
+
     }
 }

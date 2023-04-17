@@ -18,7 +18,6 @@ public class TopicQueue {
         topicQueue.add(message);
         if(topic=="Log") {
             try {
-                System.out.println("Arriva missatge");
                 File f1 = new File("operations.log");
                 if(!f1.exists()) {
                     f1.createNewFile();
@@ -33,9 +32,7 @@ public class TopicQueue {
             }
         }
         else{
-            System.out.println("Arriva missatge");
             if (publishMode == EPublishMode.RoundRobin) {
-                System.out.println("Round Robin");
                 for (Enumeration e = listenerQueue.elements(); e.hasMoreElements(); ) {
                     TopicListenerInterface listener = (TopicListenerInterface) e.nextElement();
                     if (!roundRobinQueue.contains(listener)) {
@@ -62,7 +59,6 @@ public class TopicQueue {
                 for (Enumeration e = listenerQueue.elements(); e.hasMoreElements(); ) {
                     TopicListenerInterface listener = (TopicListenerInterface) e.nextElement();
                     try {
-                        System.out.println("Broadcast");
                         listener.onTopicMessage(message.message, topic);
                     } catch (RemoteException re) {
                         System.out.println(" Listener not accessible, removing listener -" + listener);

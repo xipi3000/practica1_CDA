@@ -82,7 +82,7 @@ public class DisSumWorker implements TopicListenerInterface, Runnable{
             work_exists = true;
             //Sync with master now that all have subscribed to Work queue
             barrier.await();
-            while(work_exists);
+            client.MsgQ_Disconnect();
             Thread.currentThread().join();
         } catch (RemoteException | BrokenBarrierException | InterruptedException e) {
             throw new RuntimeException(e);
