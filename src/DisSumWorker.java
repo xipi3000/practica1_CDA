@@ -13,7 +13,6 @@ import java.util.concurrent.CyclicBarrier;
 
 public class DisSumWorker implements TopicListenerInterface, Runnable{
     long tareas_calculadas;
-    boolean work_exists = false;
     static MsgQClient client;
     static String reg;
     CyclicBarrier barrier;
@@ -24,27 +23,28 @@ public class DisSumWorker implements TopicListenerInterface, Runnable{
 
     @Override
     public void onTopicMessage(String message,String topic) throws RemoteException {
-
         StringTokenizer stok = new StringTokenizer(message, "-");
         try {
+            //Get interval and do calculations
             long first = Long.parseLong((String) stok.nextElement());
             long last = Long.parseLong((String) stok.nextElement());
             long res = calcularSumaPrimos(first, last);
+            //Send result
             if (client.MsgQ_SendMessage("Results", String.valueOf(res), 2) == EMomError.NoExisteixMsgQ)
                 throw new RuntimeException("No existeix la cua");
             this.tareas_calculadas++;
         } catch (NumberFormatException e) {
+            //For when we recieve messages from other queues that are not intervals
             System.out.println(message);
         }
-
     }
 
     @Override
     public void onTopicClosed(String topic) {
         System.out.println("Se ha terminado la ejecucion del programa. Se han calculado "+tareas_calculadas+" tareas.");
-        work_exists=false;
     }
 
+    /* FUNCTION GIVE TO DO THE NEEDED CALCULATIONS */
     public static long calcularSumaPrimos(long begin,long end) {
         long sumaPrimos = 0;
         long numero;
@@ -59,6 +59,7 @@ public class DisSumWorker implements TopicListenerInterface, Runnable{
         return sumaPrimos;
     }
 
+    /* FUNCTION GIVE TO CHECK IF A NUMBER IS PRIME */
     public static boolean esPrimo(long numero) {
         for (long i = 3; i * i <= numero; i += 2) {
             if (numero % i == 0) {
@@ -71,13 +72,15 @@ public class DisSumWorker implements TopicListenerInterface, Runnable{
     @Override
     public void run() {
         try {
+            //Get distributed object
             client = new MsgQClient();
             client.MsqQ_Init(reg);
+            //Export so server can use callbacks
             DisSumWorker listen = new DisSumWorker(reg, new CyclicBarrier(1));
             TopicListenerInterface listener = (TopicListenerInterface) UnicastRemoteObject.exportObject(listen, 0);
+            //Sub to topics
             if(client.MsgQ_Subscribe("Log", listener)==EMomError.NoExisteixTopicQ) throw new RuntimeException("No existeix una cua");
             if(client.MsgQ_Subscribe("Work", listener)==EMomError.NoExisteixTopicQ) throw new RuntimeException("No existeix una cua");
-            work_exists = true;
             //Sync with master now that all have subscribed to Work queue
             barrier.await();
             client.MsgQ_Disconnect();

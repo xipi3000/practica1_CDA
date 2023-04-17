@@ -18,23 +18,24 @@ public class DisSumMaster {
             System.setSecurityManager(new RMISecurityManager());
         //Set parameters given
         if (args.length < 2){
-            System.out.println("No s'han proveït suficients paràmetres: <Num a calcular> <Num threads>");
+            System.out.println("No s'han proveït suficients paràmetres: <Num a calcular> <Num threads> [<ip servidor>]");
             exit(-1);
         }
         long last = Integer.parseInt(args[0]); //numero final a sumar
         long jobs = Integer.parseInt(args[1]); //Nº tareas
-        //Barrier to make sure workers have been created before starting to publish messages
-        CyclicBarrier barrier = new CyclicBarrier((int)jobs+1);
-        //Get default queues
         String reg = "localhost";
         if(args.length > 2){
             reg = args[2];
         }
+        //Barrier to make sure workers have been created before starting to publish messages
+        CyclicBarrier barrier = new CyclicBarrier((int)jobs+1);
+        //Get distributed object
         MsgQClient client = new MsgQClient();
         client.MsqQ_Init(reg);
+        //Create needed queues
         client.MsgQ_CreateTopic("Work", EPublishMode.RoundRobin); //usamos su método asociado para crear el Topic
         client.MsgQ_CreateQueue("Results"); //usamos otro método para crear una cola tipo P2P
-
+        //Create workers (we decided to create a worker for every job needed to do, since it's not specified)
         for (int i=0; i<jobs; i++){
             DisSumWorker w = new DisSumWorker(reg, barrier);
             Thread thread = new Thread(w);
@@ -60,7 +61,7 @@ public class DisSumMaster {
             }
             client.MsgQ_Publish("Work", message, 1); //type = 1 -> intervals
         }
-        //Wait for results (since it's not blocking, we need the counter and to check for not null)
+        //Wait for results (since it can be not blocking, we need the counter and to check for not null)
         int jobs_done = 0;
         long res = 0;
         while (jobs_done < jobs){
@@ -72,10 +73,9 @@ public class DisSumMaster {
             }
         }
         System.out.println("S'ha acabat de sumar, resultat final: "+res);
-        //Close queues after finishing job
+        //Close queues after finishing job, end program
         client.MsgQ_CloseTopic("Work");
         client.MsgQ_CloseQueue("Results");
-
         client.MsgQ_Disconnect();
         exit(0);
     }
