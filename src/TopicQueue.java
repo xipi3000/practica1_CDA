@@ -1,3 +1,10 @@
+/* ---------------------------------------------------------------
+Práctica 1.
+Código fuente: MsgRMI.java
+Grau Informàtica
+48053151X Pol Escolà
+49263877Q Antonio López Gómez
+--------------------------------------------------------------- */
 import java.io.*;
 import java.rmi.RemoteException;
 import java.util.Enumeration;
@@ -16,7 +23,7 @@ public class TopicQueue {
     }
     public void addMsg(Message message,String topic){
         topicQueue.add(message);
-        if(topic=="Log") {
+        if(topic.equals("Log")) {
             try {
                 File f1 = new File("operations.log");
                 if(!f1.exists()) {

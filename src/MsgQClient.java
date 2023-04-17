@@ -1,11 +1,16 @@
+/* ---------------------------------------------------------------
+Práctica 1.
+Código fuente: MsgRMI.java
+Grau Informàtica
+48053151X Pol Escolà
+49263877Q Antonio López Gómez
+--------------------------------------------------------------- */
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import java.net.MalformedURLException;
 import java.rmi.*;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Hashtable;
-import java.util.Objects;
 
 public class MsgQClient implements TopicListenerInterface {
     private static MsgQ msgQ;
@@ -45,9 +50,7 @@ public class MsgQClient implements TopicListenerInterface {
             msgQ.MsgQ_Disconnect();
             ctx.close();
 
-        } catch (NamingException e) {
-            throw new RuntimeException(e);
-        } catch (RemoteException e) {
+        } catch (NamingException | RemoteException e) {
             throw new RuntimeException(e);
         }
     }

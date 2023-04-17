@@ -1,9 +1,14 @@
-import java.io.File;
+/* ---------------------------------------------------------------
+Práctica 1.
+Código fuente: MsgRMI.java
+Grau Informàtica
+48053151X Pol Escolà
+49263877Q Antonio López Gómez
+--------------------------------------------------------------- */
 import java.io.FileWriter;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Hashtable;
-import java.util.Stack;
 import java.util.Vector;
 
 public class MsgQServant implements MsgQ, Runnable {
@@ -156,7 +161,7 @@ public class MsgQServant implements MsgQ, Runnable {
     }
     public  EMomError publish(String topic, String message, int type){
         if(existeixTopicQ(topic)){
-            if(topic=="Log"){
+            if(topic.equals("Log")){
                 topicQueues.get(topic).addMsg(new Message(message, type),topic);
                 return EMomError.NoError;
             }

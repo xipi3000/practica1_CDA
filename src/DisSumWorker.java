@@ -2,18 +2,14 @@
 Práctica 1.
 Código fuente: MsgRMI.java
 Grau Informàtica
-XXXXXXXXX Pol Escolà
+48053151X Pol Escolà
 49263877Q Antonio López Gómez
 --------------------------------------------------------------- */
-import java.io.FileWriter;
-import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.StringTokenizer;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
-
-import static java.lang.Thread.sleep;
 
 public class DisSumWorker implements TopicListenerInterface, Runnable{
     long tareas_calculadas;

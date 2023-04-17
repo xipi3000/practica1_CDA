@@ -1,8 +1,15 @@
+/* ---------------------------------------------------------------
+Práctica 1.
+Código fuente: MsgRMI.java
+Grau Informàtica
+48053151X Pol Escolà
+49263877Q Antonio López Gómez
+--------------------------------------------------------------- */
 import java.rmi.RemoteException;
 
 public interface MsgQ extends java.rmi.Remote
 {
-    public EMomError MsgQ_CreateQueue(String msgqname) throws RemoteException;
+    EMomError MsgQ_CreateQueue(String msgqname) throws RemoteException;
     EMomError MsgQ_CloseQueue(String msgqname)throws RemoteException;
     EMomError MsgQ_SendMessage(String msgqname, String message, int type) throws RemoteException;
     String MsgQ_ReceiveMessage(String msgqname, int type,Boolean bloqueante) throws RemoteException;

@@ -1,3 +1,10 @@
+/* ---------------------------------------------------------------
+Práctica 1.
+Código fuente: MsgRMI.java
+Grau Informàtica
+48053151X Pol Escolà
+49263877Q Antonio López Gómez
+--------------------------------------------------------------- */
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import java.rmi.*;
@@ -11,7 +18,7 @@ import static java.lang.System.exit;
 
 public class MsgQServer {
 
-    public MsgQServer() throws RemoteException {};
+    public MsgQServer() {}
     private static InitialContext ctx;
     public static void main(String args[])
     {

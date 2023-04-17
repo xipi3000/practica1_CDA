@@ -2,7 +2,7 @@
 Práctica 1.
 Código fuente: MsgRMI.java
 Grau Informàtica
-XXXXXXXXX Pol Escolà
+48053151X Pol Escolà
 49263877Q Antonio López Gómez
 --------------------------------------------------------------- */
 import java.io.IOException;
@@ -33,7 +33,6 @@ public class DisSumMaster {
         MsgQClient client = new MsgQClient();
         client.MsqQ_Init(reg);
         client.MsgQ_CreateTopic("Work", EPublishMode.RoundRobin); //usamos su método asociado para crear el Topic
-        //client.MsgQ_CreateTopic("Log", EPublishMode.Broadcast); //usamos su método asociado para crear el Topic
         client.MsgQ_CreateQueue("Results"); //usamos otro método para crear una cola tipo P2P
 
         for (int i=0; i<jobs; i++){
