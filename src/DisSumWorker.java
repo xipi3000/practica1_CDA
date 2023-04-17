@@ -21,7 +21,7 @@ public class DisSumWorker implements TopicListenerInterface{
         try {
             String reg = "localhost";
             if (args.length > 0){
-                reg = args[1];
+                reg = args[0];
             }
             //Get distributed object
             client = new MsgQClient();
