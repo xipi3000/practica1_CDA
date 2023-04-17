@@ -14,21 +14,20 @@ import static java.lang.System.exit;
 public class DisSumWorker implements TopicListenerInterface{
     long tareas_calculadas;
     static MsgQClient client;
-    static String reg;
-    CyclicBarrier barrier;
     static volatile boolean done=false;
-    public DisSumWorker(String serv, CyclicBarrier barr){
-        reg = serv;
-        barrier = barr;
-    }
+    public DisSumWorker(){}
 
     public static void main(String[] args){
         try {
+            String reg = "localhost";
+            if (args.length > 0){
+                reg = args[1];
+            }
             //Get distributed object
             client = new MsgQClient();
             client.MsqQ_Init(reg);
             //Export so server can use callbacks
-            DisSumWorker listen = new DisSumWorker(reg, new CyclicBarrier(1));
+            DisSumWorker listen = new DisSumWorker();
             TopicListenerInterface listener = (TopicListenerInterface) UnicastRemoteObject.exportObject(listen, 0);
             //Sub to topics
             if(client.MsgQ_Subscribe("Log", listener)==EMomError.NoExisteixTopicQ) throw new RuntimeException("No existeix una cua");
