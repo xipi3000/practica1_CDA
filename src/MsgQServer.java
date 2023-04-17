@@ -38,7 +38,7 @@ public class MsgQServer {
             MsgQ msgQ = (MsgQ) UnicastRemoteObject.exportObject(serveiMsgQ, 0);
 
             // Enlazar el objeto remoto (stub) con el registro de RMI.
-            Registry registry = LocateRegistry.createRegistry(6969);
+            //Registry registry = LocateRegistry.createRegistry(6969);
             final Hashtable jndiProperties = new Hashtable();
             jndiProperties.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.rmi.registry.RegistryContextFactory");
             jndiProperties.put(Context.PROVIDER_URL, "rmi://"+reg+":6969");
