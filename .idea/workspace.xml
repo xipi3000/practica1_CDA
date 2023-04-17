@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="860d4be7-a091-4234-ab2e-65298a77c519" name="Changes" comment="init">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MsgQServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MsgQServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DisSumMaster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DisSumMaster.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MsgQClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MsgQClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server.policy" beforeDir="false" afterPath="$PROJECT_DIR$/src/server.policy" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,19 +42,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Ant/Downloads/JNDI&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "C:/Users/brisk/Documents/#UNI/CDA/practica1_CDA/out/production/practica1_CDA",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\brisk\Documents\#UNI\CDA\practica1_CDA\out\production\practica1_CDA" />
     </key>
   </component>
   <component name="RunManager">
@@ -102,6 +107,9 @@
     </task>
     <option name="localTasksCounter" value="4" />
     <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.policy" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">

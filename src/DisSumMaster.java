@@ -6,15 +6,19 @@ XXXXXXXXX Pol Escolà
 49263877Q Antonio López Gómez
 --------------------------------------------------------------- */
 import java.io.IOException;
+import java.rmi.RMISecurityManager;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import static java.lang.System.exit;
 
 public class DisSumMaster {
     public static void main(String[] args) throws IOException, InterruptedException, BrokenBarrierException {
+        System.setProperty("java.security.policy","client.policy");
+        if (System.getSecurityManager() == null)
+            System.setSecurityManager(new RMISecurityManager());
         //Set parameters given
         if (args.length < 2){
-            System.out.println("No s'han proveït suficients paràmetres");
+            System.out.println("No s'han proveït suficients paràmetres: <Num a calcular> <Num threads>");
             exit(-1);
         }
         long last = Integer.parseInt(args[0]); //numero final a sumar

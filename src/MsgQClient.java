@@ -2,10 +2,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import java.net.MalformedURLException;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
-import java.rmi.Remote;
-import java.rmi.RemoteException;
+import java.rmi.*;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Hashtable;
 import java.util.Objects;
@@ -18,6 +15,7 @@ public class MsgQClient implements TopicListenerInterface {
 
     }
     public void MsqQ_Init(String ServerAddress) {
+
         final Hashtable jndiProperties = new Hashtable();
         jndiProperties.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.rmi.registry.RegistryContextFactory");
         jndiProperties.put(Context.PROVIDER_URL,"rmi://localhost:6969");
