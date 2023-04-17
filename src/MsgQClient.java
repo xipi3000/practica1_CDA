@@ -23,7 +23,7 @@ public class MsgQClient implements TopicListenerInterface {
 
         final Hashtable jndiProperties = new Hashtable();
         jndiProperties.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.rmi.registry.RegistryContextFactory");
-        jndiProperties.put(Context.PROVIDER_URL,"rmi://localhost:6969");
+        jndiProperties.put(Context.PROVIDER_URL,"rmi://"+ServerAddress+":6969");
         try{
             ctx = new InitialContext(jndiProperties);
 

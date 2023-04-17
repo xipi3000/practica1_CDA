@@ -13,7 +13,7 @@ import java.util.concurrent.CyclicBarrier;
 import static java.lang.System.exit;
 
 public class DisSumMaster {
-    public static void main(String[] args) throws IOException, InterruptedException, BrokenBarrierException {
+    public static void main(String[] args) throws IOException{
         System.setProperty("java.security.policy","client.policy");
         if (System.getSecurityManager() == null)
             System.setSecurityManager(new RMISecurityManager());
