@@ -11,14 +11,36 @@ import java.util.StringTokenizer;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
-public class DisSumWorker implements TopicListenerInterface, Runnable{
+import static java.lang.System.exit;
+
+public class DisSumWorker implements TopicListenerInterface{
     long tareas_calculadas;
     static MsgQClient client;
     static String reg;
     CyclicBarrier barrier;
+    static boolean still_working=true;
     public DisSumWorker(String serv, CyclicBarrier barr){
         reg = serv;
         barrier = barr;
+    }
+
+    public static void main (String[] args){
+        try {
+            //Get distributed object
+            client = new MsgQClient();
+            client.MsqQ_Init(reg);
+            //Export so server can use callbacks
+            DisSumWorker listen = new DisSumWorker(reg, new CyclicBarrier(1));
+            TopicListenerInterface listener = (TopicListenerInterface) UnicastRemoteObject.exportObject(listen, 0);
+            //Sub to topics
+            if(client.MsgQ_Subscribe("Log", listener)==EMomError.NoExisteixTopicQ) throw new RuntimeException("No existeix una cua");
+            if(client.MsgQ_Subscribe("Work", listener)==EMomError.NoExisteixTopicQ) throw new RuntimeException("No existeix una cua");
+            while(still_working);
+            client.MsgQ_Disconnect();
+            exit(0);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -41,8 +63,10 @@ public class DisSumWorker implements TopicListenerInterface, Runnable{
 
     @Override
     public void onTopicClosed(String topic) {
-        if(topic.equals("Work"))
+        if(topic.equals("Work")){
             System.out.println("Se ha terminado la ejecucion del programa. Se han calculado "+tareas_calculadas+" tareas.");
+            still_working=false;
+        }
     }
 
     /* FUNCTION GIVE TO DO THE NEEDED CALCULATIONS */
@@ -68,26 +92,5 @@ public class DisSumWorker implements TopicListenerInterface, Runnable{
             }
         }
         return true;
-    }
-
-    @Override
-    public void run() {
-        try {
-            //Get distributed object
-            client = new MsgQClient();
-            client.MsqQ_Init(reg);
-            //Export so server can use callbacks
-            DisSumWorker listen = new DisSumWorker(reg, new CyclicBarrier(1));
-            TopicListenerInterface listener = (TopicListenerInterface) UnicastRemoteObject.exportObject(listen, 0);
-            //Sub to topics
-            if(client.MsgQ_Subscribe("Log", listener)==EMomError.NoExisteixTopicQ) throw new RuntimeException("No existeix una cua");
-            if(client.MsgQ_Subscribe("Work", listener)==EMomError.NoExisteixTopicQ) throw new RuntimeException("No existeix una cua");
-            //Sync with master now that all have subscribed to Work queue
-            barrier.await();
-            client.MsgQ_Disconnect();
-            Thread.currentThread().join();
-        } catch (RemoteException | BrokenBarrierException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

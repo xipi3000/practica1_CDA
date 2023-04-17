@@ -90,7 +90,6 @@ public class MsgQServant implements MsgQ, Runnable {
     public String receiveMessage(String msgqname,int type,boolean bloqueante){
 
         if(existeixMsgQ(msgqname)) {
-            System.out.println("whaaa");
             if(bloqueante){
                 int it=-1;
                 while(it==-1) {

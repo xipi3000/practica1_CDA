@@ -7,6 +7,7 @@ Grau Informàtica
 --------------------------------------------------------------- */
 import java.io.IOException;
 import java.rmi.RMISecurityManager;
+import java.util.Scanner;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import static java.lang.System.exit;
@@ -27,22 +28,15 @@ public class DisSumMaster {
         if(args.length > 2){
             reg = args[2];
         }
-        //Barrier to make sure workers have been created before starting to publish messages
-        CyclicBarrier barrier = new CyclicBarrier((int)jobs+1);
         //Get distributed object
         MsgQClient client = new MsgQClient();
         client.MsqQ_Init(reg);
         //Create needed queues
         client.MsgQ_CreateTopic("Work", EPublishMode.RoundRobin); //usamos su método asociado para crear el Topic
         client.MsgQ_CreateQueue("Results"); //usamos otro método para crear una cola tipo P2P
-        //Create workers (we decided to create a worker for every job needed to do, since it's not specified)
-        for (int i=0; i<jobs; i++){
-            DisSumWorker w = new DisSumWorker(reg, barrier);
-            Thread thread = new Thread(w);
-            thread.start();
-        }
         //Waiting in case all workers haven't subscribed yet
-        barrier.await();
+        Scanner in = new Scanner(System.in);
+        in.nextLine();
         //Distribute jobs
         int numeros_por_tarea = (int)(last / jobs); //proporción numeros a sumar por tarea
         String message;
