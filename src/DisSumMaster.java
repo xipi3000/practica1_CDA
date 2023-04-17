@@ -35,6 +35,7 @@ public class DisSumMaster {
         client.MsgQ_CreateTopic("Work", EPublishMode.RoundRobin); //usamos su método asociado para crear el Topic
         //client.MsgQ_CreateTopic("Log", EPublishMode.Broadcast); //usamos su método asociado para crear el Topic
         client.MsgQ_CreateQueue("Results"); //usamos otro método para crear una cola tipo P2P
+
         for (int i=0; i<jobs; i++){
             DisSumWorker w = new DisSumWorker(reg, barrier);
             Thread thread = new Thread(w);
@@ -64,7 +65,7 @@ public class DisSumMaster {
         int jobs_done = 0;
         long res = 0;
         while (jobs_done < jobs){
-            String msg = client.MsgQ_ReceiveMessage("Results", 2);
+            String msg = client.MsgQ_ReceiveMessage("Results", 2,false);
             if (msg != null){
                 jobs_done++;
                 long partialRes = processMessage(msg);

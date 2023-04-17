@@ -13,6 +13,8 @@ import java.util.StringTokenizer;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
+import static java.lang.Thread.sleep;
+
 public class DisSumWorker implements TopicListenerInterface, Runnable{
     long tareas_calculadas;
     boolean work_exists = false;

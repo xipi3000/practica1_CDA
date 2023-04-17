@@ -61,8 +61,8 @@ public class MsgQClient implements TopicListenerInterface {
         return msgQ.MsgQ_SendMessage(msgqname,message,type);
 
     }
-    public String MsgQ_ReceiveMessage(String msgqname, int type) throws RemoteException {
-        return msgQ.MsgQ_ReceiveMessage(msgqname,type);
+    public String MsgQ_ReceiveMessage(String msgqname, int type, Boolean bloqueante) throws RemoteException {
+        return msgQ.MsgQ_ReceiveMessage(msgqname,type,bloqueante);
     }
     public EMomError MsgQ_CreateTopic(String topicname, EPublishMode mode) throws RemoteException {
         return msgQ.MsgQ_CreateTopic(topicname,mode);

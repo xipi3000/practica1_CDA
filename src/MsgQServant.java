@@ -78,20 +78,35 @@ public class MsgQServant implements MsgQ, Runnable {
 
     }
     @Override
-    public String MsgQ_ReceiveMessage(String msgqname,int type) throws RemoteException{
-        return  receiveMessage(msgqname,type);
+    public String MsgQ_ReceiveMessage(String msgqname,int type,Boolean bloqueante) throws RemoteException{
+        return  receiveMessage(msgqname,type,bloqueante);
     }
 
-    public String receiveMessage(String msgqname,int type){
+    public String receiveMessage(String msgqname,int type,boolean bloqueante){
+
         if(existeixMsgQ(msgqname)) {
-            int it = FIFOSeach(clientQueues.get(msgqname), type);
-            if (it != -1) {
-                Message msg = clientQueues.get(msgqname).remove(it);
-                addToLog("Message "+msgqname+" recieved");
-                return msg.message;
+            System.out.println("whaaa");
+            if(bloqueante){
+                int it=-1;
+                while(it==-1) {
+                    it = FIFOSeach(clientQueues.get(msgqname), type);
+                    if (it != -1) {
+                        Message msg = clientQueues.get(msgqname).remove(it);
+                        addToLog("Message " + msgqname + " recieved");
+                        return msg.message;
+                    }
+                }
             }
-            addToLog("No messages found at queue"+msgqname);
-            return null; //crec que això hauria de ser un null ["Error, no queden missatges!"]
+            else{
+                int it = FIFOSeach(clientQueues.get(msgqname), type);
+                if (it != -1) {
+                    Message msg = clientQueues.get(msgqname).remove(it);
+                    addToLog("Message " + msgqname + " recieved");
+                    return msg.message;
+                }
+                addToLog("No messages found at queue" + msgqname);
+                return null; //crec que això hauria de ser un null ["Error, no queden missatges!"]
+            }
         }
         addToLog(msgqname+" queue doesn't exist");
         return "Error, no existeix la cua!";
