@@ -19,6 +19,9 @@ public class MsgQServer {
 
         try
         {
+            System.setProperty("java.security.policy","server.policy");
+            if (System.getSecurityManager() == null)
+                System.setSecurityManager(new RMISecurityManager());
             // Cargar el servicio.
             MsgQServant serveiMsgQ = new MsgQServant();
 
