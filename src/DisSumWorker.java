@@ -8,9 +8,7 @@ Grau Informàtica
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.StringTokenizer;
-import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
-
 import static java.lang.System.exit;
 
 public class DisSumWorker implements TopicListenerInterface{
@@ -18,13 +16,13 @@ public class DisSumWorker implements TopicListenerInterface{
     static MsgQClient client;
     static String reg;
     CyclicBarrier barrier;
-    static boolean still_working=true;
+    static volatile boolean done=false;
     public DisSumWorker(String serv, CyclicBarrier barr){
         reg = serv;
         barrier = barr;
     }
 
-    public static void main (String[] args){
+    public static void main(String[] args){
         try {
             //Get distributed object
             client = new MsgQClient();
@@ -35,8 +33,7 @@ public class DisSumWorker implements TopicListenerInterface{
             //Sub to topics
             if(client.MsgQ_Subscribe("Log", listener)==EMomError.NoExisteixTopicQ) throw new RuntimeException("No existeix una cua");
             if(client.MsgQ_Subscribe("Work", listener)==EMomError.NoExisteixTopicQ) throw new RuntimeException("No existeix una cua");
-            while(still_working);
-            client.MsgQ_Disconnect();
+            while (!done) Thread.onSpinWait();
             exit(0);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
@@ -65,7 +62,9 @@ public class DisSumWorker implements TopicListenerInterface{
     public void onTopicClosed(String topic) {
         if(topic.equals("Work")){
             System.out.println("Se ha terminado la ejecucion del programa. Se han calculado "+tareas_calculadas+" tareas.");
-            still_working=false;
+            client.MsgQ_Disconnect();
+            done=true;
+            System.out.println("Done");
         }
     }
 

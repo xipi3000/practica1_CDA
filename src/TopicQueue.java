@@ -58,11 +58,8 @@ public class TopicQueue {
                         roundRobinQueue.clear();
                         e = listenerQueue.elements();
                     }
-
-
                 }
             } else if (publishMode == EPublishMode.Broadcast) {
-
                 for (Enumeration e = listenerQueue.elements(); e.hasMoreElements(); ) {
                     TopicListenerInterface listener = (TopicListenerInterface) e.nextElement();
                     try {
@@ -85,14 +82,11 @@ public class TopicQueue {
             TopicListenerInterface listener = (TopicListenerInterface) e.nextElement();
             try {
                 listener.onTopicClosed(topic);
-                //Si es necessari buidar la llista, fem un .clear al acabar el for. Sino simplement treiem-ho, perque
-                //amb això funciona mal.
-                //listenerQueue.remove( listener );
             }
             catch (RemoteException re)
             {
                 System.out.println (" Listener not accessible, removing listener -" + listener);
-                // Remote the listener
+                // Remove the listener
                 listenerQueue.remove( listener );
             }
         }
