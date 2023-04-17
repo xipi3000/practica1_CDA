@@ -41,7 +41,8 @@ public class DisSumWorker implements TopicListenerInterface, Runnable{
 
     @Override
     public void onTopicClosed(String topic) {
-        System.out.println("Se ha terminado la ejecucion del programa. Se han calculado "+tareas_calculadas+" tareas.");
+        if(topic.equals("Work"))
+            System.out.println("Se ha terminado la ejecucion del programa. Se han calculado "+tareas_calculadas+" tareas.");
     }
 
     /* FUNCTION GIVE TO DO THE NEEDED CALCULATIONS */
