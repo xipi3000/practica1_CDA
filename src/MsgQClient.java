@@ -16,9 +16,7 @@ public class MsgQClient implements TopicListenerInterface {
     private static MsgQ msgQ;
     private static InitialContext ctx;
     private static TopicListenerInterface msgQlistener;
-    public MsgQClient() throws RemoteException{
-
-    }
+    public MsgQClient() throws RemoteException{}
     public void MsqQ_Init(String ServerAddress) {
 
         final Hashtable jndiProperties = new Hashtable();
@@ -35,10 +33,6 @@ public class MsgQClient implements TopicListenerInterface {
             // Exportar el objeto de la clase de la implementación al stub del interfase.
             msgQlistener = (TopicListenerInterface) UnicastRemoteObject.exportObject(clientMonitor, 0);
             System.out.println("S'ha connectat");
-
-
-
-
         } catch (RemoteException e) {
             System.out.println ("RMI Error - " + e);
         } catch (NamingException e) {
@@ -49,7 +43,6 @@ public class MsgQClient implements TopicListenerInterface {
         try {
             msgQ.MsgQ_Disconnect();
             ctx.close();
-
         } catch (NamingException | RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -62,7 +55,6 @@ public class MsgQClient implements TopicListenerInterface {
     }
     public EMomError MsgQ_SendMessage(String msgqname, String message, int type) throws RemoteException {
         return msgQ.MsgQ_SendMessage(msgqname,message,type);
-
     }
     public String MsgQ_ReceiveMessage(String msgqname, int type, Boolean bloqueante) throws RemoteException {
         return msgQ.MsgQ_ReceiveMessage(msgqname,type,bloqueante);
@@ -90,7 +82,5 @@ public class MsgQClient implements TopicListenerInterface {
         System.out.println("S'ha tancat el topic: "+topic);
 
     }
-    public static void main(String[] args) throws RemoteException{
-
-    }
+    public static void main(String[] args) throws RemoteException{}
 }

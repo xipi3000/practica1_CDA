@@ -8,7 +8,6 @@ Grau Informàtica
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.StringTokenizer;
-import java.util.concurrent.CyclicBarrier;
 import static java.lang.System.exit;
 
 public class DisSumWorker implements TopicListenerInterface{

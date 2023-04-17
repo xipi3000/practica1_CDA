@@ -13,25 +13,15 @@ import java.util.Vector;
 
 public class MsgQServant implements MsgQ, Runnable {
     private static final long serialVersionUID = 1;
-
     private Hashtable<String,Vector<Message>> clientQueues = new Hashtable<>();
     private Hashtable<String, TopicQueue> topicQueues = new Hashtable<>();
-
-    public MsgQServant() throws RemoteException{
-
-    }
+    public MsgQServant() throws RemoteException{}
 
     private boolean existeixMsgQ(String msgqname){
-        if(clientQueues.get(msgqname)!=null){
-            return true;
-        }
-        return false;
+        return clientQueues.get(msgqname) != null;
     }
     private boolean existeixTopicQ(String topicname){
-        if(topicQueues.get(topicname)!=null){
-            return true;
-        }
-        return false;
+        return topicQueues.get(topicname) != null;
     }
     public void MsgQ_Init()throws RemoteException{
         System.out.println("Client connected");
@@ -80,7 +70,6 @@ public class MsgQServant implements MsgQ, Runnable {
         }
         addToLog("Couldn't send message, queue "+ msgqname+ " doesn't exist");
         return EMomError.NoExisteixMsgQ;
-
     }
     @Override
     public String MsgQ_ReceiveMessage(String msgqname,int type,Boolean bloqueante) throws RemoteException{
@@ -88,7 +77,6 @@ public class MsgQServant implements MsgQ, Runnable {
     }
 
     public String receiveMessage(String msgqname,int type,boolean bloqueante){
-
         if(existeixMsgQ(msgqname)) {
             if(bloqueante){
                 int it=-1;
@@ -116,7 +104,6 @@ public class MsgQServant implements MsgQ, Runnable {
         return "Error, no existeix la cua!";
     }
     private int FIFOSeach(Vector<Message> messages,int type){
-
         for(int i = 0;i<messages.size();i++){
             if(messages.get(i).type == type){
                 return i;
@@ -175,7 +162,6 @@ public class MsgQServant implements MsgQ, Runnable {
     }
     @Override
     public  EMomError MsgQ_Subscribe(String topic, TopicListenerInterface listener) throws RemoteException{
-
         return subscribe(topic,listener);
     }
 
@@ -192,7 +178,6 @@ public class MsgQServant implements MsgQ, Runnable {
     private void addToLog(String logMsg){
         publish("Log","[Log] --> "+logMsg,0);
     }
-
     @Override
     public void run() {
         try {
@@ -200,9 +185,6 @@ public class MsgQServant implements MsgQ, Runnable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
         createTopic("Log",EPublishMode.Broadcast);
-
     }
 }

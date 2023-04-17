@@ -44,7 +44,6 @@ public class TopicQueue {
                     TopicListenerInterface listener = (TopicListenerInterface) e.nextElement();
                     if (!roundRobinQueue.contains(listener)) {
                         try {
-
                             listener.onTopicMessage(message.message, topic);
                         } catch (RemoteException re) {
                             System.out.println(" Listener not accessible, removing listener -" + listener);
@@ -91,6 +90,4 @@ public class TopicQueue {
             }
         }
     }
-
-
 }

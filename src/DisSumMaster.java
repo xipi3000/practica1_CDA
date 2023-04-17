@@ -8,8 +8,6 @@ Grau Informàtica
 import java.io.IOException;
 import java.rmi.RMISecurityManager;
 import java.util.Scanner;
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CyclicBarrier;
 import static java.lang.System.exit;
 
 public class DisSumMaster {

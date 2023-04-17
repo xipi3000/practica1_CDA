@@ -17,18 +17,20 @@ import java.util.Scanner;
 import static java.lang.System.exit;
 
 public class MsgQServer {
-
     public MsgQServer() {}
     private static InitialContext ctx;
     public static void main(String args[])
     {
         System.out.println("Cargando Servicio RMI");
-
         try
         {
             System.setProperty("java.security.policy","server.policy");
             if (System.getSecurityManager() == null)
                 System.setSecurityManager(new RMISecurityManager());
+            String reg = "localhost";
+            if (args.length > 0){
+                reg = args[0];
+            }
             // Cargar el servicio.
             MsgQServant serveiMsgQ = new MsgQServant();
 
@@ -39,18 +41,14 @@ public class MsgQServer {
             Registry registry = LocateRegistry.createRegistry(6969);
             final Hashtable jndiProperties = new Hashtable();
             jndiProperties.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.rmi.registry.RegistryContextFactory");
-            jndiProperties.put(Context.PROVIDER_URL, "rmi://localhost:6969");
+            jndiProperties.put(Context.PROVIDER_URL, "rmi://"+reg+":6969");
             ctx = new InitialContext(jndiProperties);
             ctx.bind("/jndi/MOMYservice", msgQ);
             System.err.println("Server ready");
 
-            // Create a thread, and pass the sensor server.
-            // This will activate the run() method, and trigger
-            // regular temperature changes.
             Thread thread = new Thread (serveiMsgQ);
             thread.start();
 
-            boolean end = false;
             Scanner input= new Scanner(System.in);
             while(!input.nextLine().equals("exit"));
             ctx.unbind("/jndi/MOMYservice");
